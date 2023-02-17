@@ -1,210 +1,57 @@
-const newProjectBtn = document.getElementById('new-project');
-const openProjectBtn = document.getElementById('open-project');
-const saveProjectBtn = document.getElementById('save-button');
-const canvas = document.getElementById('my-canvas');
-const context = canvas.getContext('2d');
-const backgroundImage = document.getElementById('background-image');
-let points = [];
-let projectName = '';
-canvas.style.position = 'absolute';
-canvas.style.top = backgroundImage.offsetTop + 'px';
-canvas.style.left = backgroundImage.offsetLeft + 'px';
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Battlefield Coordinate Finder 9000</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>Battlefield Coordinate Finder 9000</h1>
+    <p style="line-height: 0.5;">_____________________________________________________________________________</p>
+    <p><strong>Controls:</strong></p>
+    <p>Click on a space to create a position</p>
+    <p>Click on a position to view the location and copy to clipboard</p>
+    <p>Ctrl + Click on a position to delete</p>
+    <p style="line-height: 2;"><strong>Collection:</strong> Map image files <a href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Images/Conquest">here</a> Map save files <a href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Coordinate%20Files">here</a></p>
+    <p style="line-height: 0;">_____________________________________________________________________________</p>
+    <p style="line-height: 1;">Please select an option below:</p>
+    <button id="new-project">New</button>
+    <button id="open-project">Open </button>
+    <button id="save-button">Save</button>
+    <br>
+    <!--<p>________________________________</p> -->
+    <div id="canvas-wrapper">
+        <img src="image.jpg" id="background-image">
+        <canvas id="my-canvas"></canvas>
+      </div>
+    <!-- Add the canvas element with the correct id -->
+    <canvas id="my-canvas"></canvas>
 
-// New Button logic and configuration
-newProjectBtn.addEventListener('click', function () {
-    points = [];
-    const imageInput = document.createElement('input');
-    imageInput.type = 'file';
-    imageInput.accept = 'image/*';
-    imageInput.addEventListener('change', function (event) {
-        const image = new Image();
-        image.src = URL.createObjectURL(event.target.files[0]);
+    <!-- Add the image input element with the correct id -->
+    <input type="file" id="image-input" style="display:none">
 
-        image.onload = function () {
-            canvas.width = image.width;
-            canvas.height = image.height;
-            backgroundImage.src = image.src;
-            redrawCanvas();
-        };
-    });
-    // trigger a click event on the imageInput to open the file picker dialog
-    imageInput.click();
-});
+    <!-- Add the alert container with the correct class -->
+    <div class="alert"></div>
 
+    <!-- Include your script.js file -->
+    <script src="./Script.js"></script>
 
-// Load Button logic and configuration
-openProjectBtn.addEventListener('click', function () {
-    points = [];
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-    input.onchange = function () {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        const file = this.files[0];
-        const reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = function () {
-            const data = JSON.parse(reader.result);
-            const image = new Image();
-            image.onload = function () {
-                canvas.width = image.width;
-                canvas.height = image.height;
-                backgroundImage.src = image.src;
-                points = data.points;
-                redrawCanvas();
-            };
-            image.src = data.image;
-        };
-    };
-    input.click();
-});
+    <!-- Add the blockly library -->
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
 
-canvas.addEventListener('click', function (event) {
-    const x = event.offsetX;
-    const y = event.offsetY;
+    <!-- Add the blockly blocks library -->
+    <script src="https://unpkg.com/blockly/blocks.min.js"></script>
 
-    if (event.ctrlKey) {
-        for (let i = 0; i < points.length; i++) {
-            const point = points[i];
-            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
-            if (distance <= 5) {
-                const confirmDelete = confirm('Are you sure you want to delete?');
-                if (confirmDelete) {
-                    points.splice(i, 1);
-                    redrawCanvas(); // redraw the canvas with the updated points array
-                }
-                break;
-            }
-        }
-    } else {
-        let clickedCircle = false;
+    <!-- Add the blockly JavaScript generator library -->
+    <script src="https://unpkg.com/blockly/javascript.min.js"></script>
 
-        for (let i = 0; i < points.length; i++) {
-            const point = points[i];
-            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+    <p style="line-height: 10;">Created by andy6170</p>
 
-            if (distance <= 5) {
-                const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
-                alert(coords);
-                
-                // check if document.execCommand() is available before using it
-                if (document.queryCommandSupported('copy')) {
-                    const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
-                    const temp = document.createElement('textarea');
-                    temp.textContent = code;
-                    document.body.appendChild(temp);
-                    temp.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(temp);
-                    console.log('Text copied to clipboard');
-                } else {
-                    console.warn('Copy command is not available.');
-                }
-
-                clickedCircle = true;
-                break;
-            }
-        }
-
-        if (!clickedCircle) {
-            const coords = prompt('Please enter the X, Y, and Z coordinates (separated by spaces):');
-            const [xCoord, yCoord, zCoord] = coords.split(' ');
-            points.push({ x, y, xCoord, yCoord, zCoord });
-
-            context.beginPath();
-            context.arc(x, y, 5, 0, 2 * Math.PI);
-            context.fillStyle = 'red';
-            context.fill();
-        }
-    }
-});
-  
-function redrawCanvas() {
-    // Draws the image
-    context.drawImage(backgroundImage, 0, 0);
-  
-    // Draws the circles
-    for (let i = 0; i < points.length; i++) {
-      const point = points[i];
-      context.beginPath();
-      context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-      context.fillStyle = 'red';
-      context.fill();
-    }
-  }
-
-  canvas.addEventListener('mousemove', function (event) {
-    const x = event.offsetX;
-    const y = event.offsetY;
-    let circleHovered = false;
-  
-    for (let i = 0; i < points.length; i++) {
-        const point = points[i];
-        context.beginPath();
-        context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-      
-        if (context.isPointInPath(x, y)) {
-            context.fillStyle = '#18ff03';
-            circleHovered = true;
-        } else {
-            context.fillStyle = 'red';
-        }
-        
-        context.fill();
-    }
-  
-    if (circleHovered) {
-        canvas.style.cursor = 'pointer';
-    } else {
-        canvas.style.cursor = 'default';
-    }
-});
-
-// Save Button Function
-saveProjectBtn.addEventListener('click', async function () {
-    context.drawImage(backgroundImage, 0, 0);
-    const data = {
-        points: points,
-        image: canvas.toDataURL()
-    };
-    const json = JSON.stringify(data);
-    const blob = new Blob([json], { type: 'application/json' });
-
-    // Check if the browser supports the "showSaveFilePicker" method
-    if ('showSaveFilePicker' in window) {
-        const options = {
-            suggestedName: `Map Coordinates.json`,
-            types: [{
-                description: 'JSON file',
-                accept: { 'application/json': ['.json'] },
-            }],
-        };
-        try {
-            const handle = await window.showSaveFilePicker(options);
-            const writable = await handle.createWritable();
-            await writable.write(blob);
-            await writable.close();
-            console.log('File saved successfully!');
-        } catch (err) {
-            console.error(err);
-        }
-    } else {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `Map Coordinates.json`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        console.log('File saved successfully!');
-    }
-
-    for (let i = 0; i < points.length; i++) {
-        const point = points[i];
-        context.beginPath();
-        context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-        context.fillStyle = 'red';
-        context.fill();
-      }
-});
+    <!-- Add the blockly toolbox definition -->
+    <xml id="toolbox" style="display: none">
+        <block type="math_number">
+            <field name="NUM">0</field>
+        </block>
+        <block type="create_vector"></block>
+    </xml>
+</body>
+</html>
