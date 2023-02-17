@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Battlefield Coordinate Finder 9000</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>Battlefield Coordinate Finder 9000</h1>
+    <p>_____________________________________________________________________________</p>
+    <p>Controls:</p>
+    <p>Click on a space to create a position</p>
+    <p>Click on a position to view the location and copy to clipboard</p>
+    <p>Ctrl + Click on a position to delete</p>
+    <p>_____________________________________________________________________________</p>
+    <p>Please select an option below:</p>
+    
+    <button id="new-project">New</button>
+    <button id="open-project">Open </button>
+    <button id="save-button">Save</button>
+    <p>________________________________</p>
+    <div id="canvas-wrapper">
+        <img src="image.jpg" id="background-image">
+        <canvas id="my-canvas"></canvas>
+      </div>
+    <!-- Add the canvas element with the correct id -->
+    <canvas id="my-canvas"></canvas>
+
+    <!-- Add the image input element with the correct id -->
+    <input type="file" id="image-input" style="display:none">
+
+    <!-- Add the alert container with the correct class -->
+    <div class="alert"></div>
+
+    <!-- Include your script.js file -->
+    <script src="./Script.js"></script>
+
+    <!-- Add the blockly library -->
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+
+    <!-- Add the blockly blocks library -->
+    <script src="https://unpkg.com/blockly/blocks.min.js"></script>
+
+    <!-- Add the blockly JavaScript generator library -->
+    <script src="https://unpkg.com/blockly/javascript.min.js"></script>
+
+    <!-- Add the blockly toolbox definition -->
+    <xml id="toolbox" style="display: none">
+        <block type="math_number">
+            <field name="NUM">0</field>
+        </block>
+        <block type="create_vector"></block>
+    </xml>
+</body>
+</html>
