@@ -84,9 +84,6 @@ canvas.addEventListener('click', function (event) {
             const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
 
             if (distance <= 5) {
-                const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
-                alert(coords);
-                
                 // check if document.execCommand() is available before using it
                 if (document.queryCommandSupported('copy')) {
                     const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
@@ -97,6 +94,9 @@ canvas.addEventListener('click', function (event) {
                     document.execCommand('copy');
                     document.body.removeChild(temp);
                     console.log('Text copied to clipboard');
+
+                    const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
+                    alert(coords);
                 } else {
                     console.warn('Copy command is not available.');
                 }

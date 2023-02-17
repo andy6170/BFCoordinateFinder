@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Battlefield Coordinate Finder 9000</title>
@@ -6,18 +6,19 @@
 </head>
 <body>
     <h1>Battlefield Coordinate Finder 9000</h1>
-    <p>_____________________________________________________________________________</p>
-    <p>Controls:</p>
+    <p style="line-height: 0.5;">_____________________________________________________________________________</p>
+    <p><strong>Controls:</strong></p>
     <p>Click on a space to create a position</p>
     <p>Click on a position to view the location and copy to clipboard</p>
     <p>Ctrl + Click on a position to delete</p>
-    <p>_____________________________________________________________________________</p>
-    <p>Please select an option below:</p>
-    
+    <p style="line-height: 2;"><strong>Collection:</strong> Map image files <a href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Images/Conquest">here</a> Map save files <a href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Coordinate%20Files">here</a></p>
+    <p style="line-height: 0;">_____________________________________________________________________________</p>
+    <p style="line-height: 1;">Please select an option below:</p>
     <button id="new-project">New</button>
     <button id="open-project">Open </button>
     <button id="save-button">Save</button>
-    <p>________________________________</p>
+    <br>
+    <!--<p>________________________________</p> -->
     <div id="canvas-wrapper">
         <img src="image.jpg" id="background-image">
         <canvas id="my-canvas"></canvas>
@@ -42,6 +43,8 @@
 
     <!-- Add the blockly JavaScript generator library -->
     <script src="https://unpkg.com/blockly/javascript.min.js"></script>
+
+    <p style="line-height: 10;">Created by andy6170</p>
 
     <!-- Add the blockly toolbox definition -->
     <xml id="toolbox" style="display: none">
