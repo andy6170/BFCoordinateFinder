@@ -218,3 +218,27 @@ helpButton.addEventListener("click", function() {
       helpContent.style.display = "none";
     }
   });
+
+canvas.addEventListener('touchstart', function (event) {
+    event.preventDefault(); // prevent default touch event behavior
+
+    const x = event.touches[0].pageX - canvas.offsetLeft;
+    const y = event.touches[0].pageY - canvas.offsetTop;
+
+    let touchHold = null;
+    touchHold = setTimeout(function() {
+        for (let i = 0; i < points.length; i++) {
+            const point = points[i];
+            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+            if (distance <= 5) {
+                const confirmDelete = confirm('Are you sure you want to delete?');
+                if (confirmDelete) {
+                    points.splice(i, 1);
+                    redrawCanvas(); // redraw the canvas with the updated points array
+                }
+                break;
+            }
+        }
+        touchHold = null;
+    }, 1000); // set the duration for touch hold in milliseconds
+});
