@@ -1,6 +1,8 @@
 const newProjectBtn = document.getElementById('new-project');
 const openProjectBtn = document.getElementById('open-project');
 const saveProjectBtn = document.getElementById('save-button');
+var helpButton = document.getElementById("help-button");
+var helpContent = document.getElementById("help-content");
 const canvas = document.getElementById('my-canvas');
 const context = canvas.getContext('2d');
 const backgroundImage = document.getElementById('background-image');
@@ -208,3 +210,11 @@ saveProjectBtn.addEventListener('click', async function () {
         context.fill();
       }
 });
+
+helpButton.addEventListener("click", function() {
+    if (helpContent.style.display === "none") {
+      helpContent.style.display = "block";
+    } else {
+      helpContent.style.display = "none";
+    }
+  });
