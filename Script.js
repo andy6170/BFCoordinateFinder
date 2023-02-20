@@ -219,7 +219,7 @@ helpButton.addEventListener("click", function() {
     }
   });
 
-canvas.addEventListener('touchstart', function (event) {
+  canvas.addEventListener('touchstart', function (event) {
     event.preventDefault(); // prevent default touch event behavior
 
     const x = event.touches[0].pageX - canvas.offsetLeft;
@@ -227,18 +227,55 @@ canvas.addEventListener('touchstart', function (event) {
 
     let touchHold = null;
     touchHold = setTimeout(function() {
-        for (let i = 0; i < points.length; i++) {
-            const point = points[i];
-            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
-            if (distance <= 5) {
-                const confirmDelete = confirm('Are you sure you want to delete?');
-                if (confirmDelete) {
-                    points.splice(i, 1);
-                    redrawCanvas(); // redraw the canvas with the updated points array
-                }
-                break;
-            }
-        }
+        redrawCanvas();
         touchHold = null;
     }, 1000); // set the duration for touch hold in milliseconds
+
+    canvas.addEventListener('touchend', function(event) {
+        event.preventDefault(); // prevent default touch event behavior
+        if (touchHold !== null) {
+            clearTimeout(touchHold);
+            touchHold = null;
+        } else {
+            let clickedCircle = false;
+
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i];
+                const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+
+                if (distance <= 5) {
+                // check if document.execCommand() is available before using it
+                if (document.queryCommandSupported('copy')) {
+                    const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
+                    const temp = document.createElement('textarea');
+                    temp.textContent = code;
+                    document.body.appendChild(temp);
+                    temp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temp);
+                    console.log('Text copied to clipboard');
+
+                    const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
+                    alert(coords);
+                } else {
+                    console.warn('Copy command is not available.');
+                }
+
+                clickedCircle = true;
+                break;
+                }
+            }
+
+            if (!clickedCircle) {
+                const coords = prompt('Please enter the X, Y, and Z coordinates (separated by spaces):');
+                const [xCoord, yCoord, zCoord] = coords.split(' ');
+                points.push({ x, y, xCoord, yCoord, zCoord });
+
+                context.beginPath();
+                context.arc(x, y, 5, 0, 2 * Math.PI);
+                context.fillStyle = 'red';
+                context.fill();
+            }
+        }
+    });
 });
