@@ -5,12 +5,17 @@ var helpButton = document.getElementById("help-button");
 var helpContent = document.getElementById("help-content");
 const canvas = document.getElementById('my-canvas');
 const context = canvas.getContext('2d');
+const scrollX = canvas.scrollLeft;
+const scrollY = canvas.scrollTop;
 const backgroundImage = document.getElementById('background-image');
 let points = [];
 let projectName = '';
+let menuOpen = false;
 canvas.style.position = 'absolute';
 canvas.style.top = backgroundImage.offsetTop + 'px';
 canvas.style.left = backgroundImage.offsetLeft + 'px';
+
+
 
 // New Button logic and configuration
 newProjectBtn.addEventListener('click', function () {
@@ -64,60 +69,173 @@ openProjectBtn.addEventListener('click', function () {
 canvas.addEventListener('click', function (event) {
     const x = event.offsetX;
     const y = event.offsetY;
-
+    const scrollX = canvas.scrollLeft;
+    const scrollY = canvas.scrollTop;
+    const truex = event.clientX + window.scrollX;
+    const truey = event.clientY + window.scrollY;
+  
     if (event.ctrlKey) {
-        for (let i = 0; i < points.length; i++) {
-            const point = points[i];
-            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
-            if (distance <= 5) {
-                const confirmDelete = confirm('Are you sure you want to delete?');
-                if (confirmDelete) {
-                    points.splice(i, 1);
-                    redrawCanvas(); // redraw the canvas with the updated points array
-                }
-                break;
-            }
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+        if (distance <= 5) {
+          const confirmDelete = confirm('Are you sure you want to delete?');
+          if (confirmDelete) {
+            points.splice(i, 1);
+            redrawCanvas(); // redraw the canvas with the updated points array
+          }
+          break;
         }
+      }
     } else {
-        let clickedCircle = false;
+      let clickedCircle = false;
+  
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+  
+        if (distance <= 5) {
+          // check if document.execCommand() is available before using it
+          if (document.queryCommandSupported('copy')) {
+            const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
+            const temp = document.createElement('textarea');
+            temp.textContent = code;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            console.log('Text copied to clipboard');
+  
+            const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
+            alert(coords);
+          } else {
+            console.warn('Copy command is not available.');
+          }
+  
+          clickedCircle = true;
+          break;
+        }
+      }
+  
+      if (!clickedCircle && !menuOpen) {
+        menuOpen = true;
+        const lastSelectedValue = localStorage.getItem('lastSelectedValue');
+        const style = document.createElement('style');
+        style.textContent = `
+          option:checked {
+            background-color: transparent;
+            color: inherit;
+          }
 
-        for (let i = 0; i < points.length; i++) {
-            const point = points[i];
-            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+        `;
+        document.head.appendChild(style);
 
-            if (distance <= 5) {
-                // check if document.execCommand() is available before using it
-                if (document.queryCommandSupported('copy')) {
-                    const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
-                    const temp = document.createElement('textarea');
-                    temp.textContent = code;
-                    document.body.appendChild(temp);
-                    temp.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(temp);
-                    console.log('Text copied to clipboard');
+        const inputContainer = document.createElement('div');
+        inputContainer.style.position = 'absolute';
+        inputContainer.style.top = `${truey}px`;
+        inputContainer.style.left = `${truex}px`;
+        inputContainer.style.backgroundColor = '#292929';
+        inputContainer.style.border = '3px solid #141414';
+        inputContainer.style.padding = '9px';
+        console.log('scrollX:', scrollX, 'scrollY:', scrollY);
+      
+        const inputLabel = document.createElement('label');
+        inputLabel.textContent = 'Enter Coordinates: ';
+        const inputField = document.createElement('input');
+        inputField.type = 'text';
+      
+        const selectLabel = document.createElement('label');
+        selectLabel.textContent = 'Coordinate Type: ';
+        selectLabel.style.lineHeight = "2";
+        const selectField = document.createElement('select');
+        selectField.style.fontWeight = "bold";
+        const option1 = document.createElement('option');
+        option1.value = '#ff0000';
+        option1.textContent = 'Spawn';
+        option1.style.backgroundColor = '#ff0000';
+        option1.style.fontWeight = "bold";
+        const option2 = document.createElement('option');
+        option2.value = '#eaff00';
+        option2.textContent = 'MCOM';
+        option2.style.backgroundColor = '#eaff00';
+        option2.style.fontWeight = "bold";
+        const option3 = document.createElement('option');
+        option3.value = '#03f7ff';
+        option3.textContent = 'Other';
+        option3.style.backgroundColor = '#03f7ff';
+        option3.style.fontWeight = "bold";
+      
+        selectField.appendChild(option1);
+        selectField.appendChild(option2);
+        selectField.appendChild(option3);
 
-                    const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
-                    alert(coords);
-                } else {
-                    console.warn('Copy command is not available.');
-                }
-
-                clickedCircle = true;
-                break;
-            }
+        if (lastSelectedValue) {
+          selectField.value = lastSelectedValue;
         }
 
-        if (!clickedCircle) {
-            const coords = prompt('Please enter the X, Y, and Z coordinates (separated by spaces):');
-            const [xCoord, yCoord, zCoord] = coords.split(' ');
-            points.push({ x, y, xCoord, yCoord, zCoord });
+        selectField.style.backgroundColor = selectField.value
+      
+        selectField.addEventListener('change', function() {
+          selectField.style.backgroundColor = selectField.value;
+          localStorage.setItem('lastSelectedValue', selectField.value);
+        });
+      
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'Submit';
+        submitButton.style.backgroundColor = "#00ffff";
+        submitButton.style.fontFamily = "BatlefieldFont";
+        submitButton.style.fontSize = "18px";
+        submitButton.style.marginTop = "5px";
+        submitButton.addEventListener('click', function () {
+          const xCoord = inputField.value.split(' ')[0];
+          const yCoord = inputField.value.split(' ')[1];
+          const zCoord = inputField.value.split(' ')[2];
+          const selectedItem = selectField.value;
+      
+          points.push({ x, y, xCoord, yCoord, zCoord, selectedItem });
+      
+          context.beginPath();
+          context.arc(x, y, 6, 0, 2 * Math.PI);
+          context.fillStyle = selectedItem;
+          context.fill();
+      
+          inputContainer.remove();
+          menuOpen = false;
+        });
 
-            context.beginPath();
-            context.arc(x, y, 5, 0, 2 * Math.PI);
-            context.fillStyle = 'red';
-            context.fill();
-        }
+        inputField.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault(); // prevent the default behavior of the Enter key
+            submitButton.click(); // simulate a click event on the Submit button
+          }
+        });
+      
+        const cancelButton = document.createElement('button');
+        cancelButton.textContent = 'Cancel';
+        cancelButton.style.backgroundColor = "#00ffff";
+        cancelButton.style.fontFamily = "BatlefieldFont";
+        cancelButton.style.fontSize = "18px";
+        cancelButton.style.marginTop = "5px";
+        cancelButton.style.marginLeft = "10px";
+        cancelButton.addEventListener('click', function () {
+          inputContainer.remove();
+          menuOpen = false;
+        });
+      
+        inputContainer.appendChild(inputLabel);
+        inputContainer.appendChild(inputField);
+        inputContainer.appendChild(document.createElement('br'));
+        inputContainer.appendChild(selectLabel);
+        inputContainer.appendChild(selectField);
+        inputContainer.appendChild(document.createElement('br'));
+        inputContainer.appendChild(submitButton);
+        inputContainer.appendChild(cancelButton);
+      
+        document.body.appendChild(inputContainer);
+
+        inputField.focus();
+      }
+
     }
 });
   
@@ -129,8 +247,8 @@ function redrawCanvas() {
     for (let i = 0; i < points.length; i++) {
       const point = points[i];
       context.beginPath();
-      context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-      context.fillStyle = 'red';
+      context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+      context.fillStyle = point.selectedItem;
       context.fill();
     }
   }
@@ -143,13 +261,13 @@ function redrawCanvas() {
     for (let i = 0; i < points.length; i++) {
         const point = points[i];
         context.beginPath();
-        context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+        context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
       
         if (context.isPointInPath(x, y)) {
             context.fillStyle = '#18ff03';
             circleHovered = true;
         } else {
-            context.fillStyle = 'red';
+            context.fillStyle = point.selectedItem;
         }
         
         context.fill();
@@ -205,8 +323,8 @@ saveProjectBtn.addEventListener('click', async function () {
     for (let i = 0; i < points.length; i++) {
         const point = points[i];
         context.beginPath();
-        context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-        context.fillStyle = 'red';
+        context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+        context.fillStyle = point.selectedItem;
         context.fill();
       }
 });
@@ -218,3 +336,5 @@ helpButton.addEventListener("click", function() {
       helpContent.style.display = "none";
     }
   });
+
+  

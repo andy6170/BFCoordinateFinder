@@ -46,7 +46,7 @@ a {
 }
 
 .button {
-    background-color: cyan;
+    background-color: rgb(0, 255, 255);
     color: black;
     padding: 5px 15px;
     border: none;
@@ -80,3 +80,4 @@ hr {
 	margin: 10px auto 10px 0;
   }
 
+  
