@@ -4,17 +4,41 @@
     <title>Battlefield Coordinate Finder 9000</title>
     <link href="style.css" rel="stylesheet" type="text/css">
     <meta property="og:title" content="Battlefield Coordinate Finder">
-    <meta property="og:description" content="A tool for creating, finding and saving coordinates for Battlefield maps.">
+    <meta property="og:description" content="A tool for creating, finding and saving coordinates on Battlefield maps.">
     <meta property="og:image" content="https://media.discordapp.net/attachments/1077345398139670671/1077770187790635030/image.png">
     <meta property="og:url" content="https://https://andy6170.github.io/BFCoordinateFinder/">
 </head>
 <body>
     <h1>Battlefield Coordinate Finder 9000</h1>
     <hr width=520px;>
-    <button id="new-project" class="button">New</button>
+    <button id="new-button" class="button">New</button>
     <button id="open-project" class="button">Open</button>
+    <div id="hidesave" style="display: none;">
     <button id="save-button" class="button">Save</button>
+    </div>
     <button id="help-button" class="helpbutton">Help Toggle</button>
+    <div id="new-options" style="display: none;">
+    <p>Select a map from the collection or import your own image</p>
+    <hr width=520px;>
+    <div>
+    <label for="game-mode">Game Mode: </label>
+    <select id="game-mode">
+      <option value="select">Please select..</option>
+      <option value="conquest">Conquest</option>
+      <option value="tdm">Team Deathmatch</option>
+      <option value="ffa">Free For All</option>
+    </select>
+    </div>
+    <div>
+    <label for="map">Map: </label>
+    <select id="map">
+      <option value="">Please select a game mode</option>
+    </select>
+    </div>
+    <button id="new-submit" class="extrabutton">Submit</button>
+    <button id="new-import" class="extrabutton">Import</button>
+    </div>
+
     <div id="help-content" style="display: none;">
         <hr width=520px;>
       <p><strong>Controls:</strong></p>
@@ -41,16 +65,6 @@
     <!-- Include your script.js file -->
     <script src="./Script.js"></script>
 
-    <!-- Add the blockly library -->
-    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-
-    <!-- Add the blockly blocks library -->
-    <script src="https://unpkg.com/blockly/blocks.min.js"></script>
-
-    <!-- Add the blockly JavaScript generator library -->
-    <script src="https://unpkg.com/blockly/javascript.min.js"></script>
-
-    <!-- <p style="line-height: 1;">Created by andy6170</p>-->
 
     <!-- Add the blockly toolbox definition -->
     <xml id="toolbox" style="display: none">
