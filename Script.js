@@ -1,8 +1,12 @@
-const newProjectBtn = document.getElementById('new-project');
+const newProjectBtn = document.getElementById('new-import');
+const newSubmitBtn = document.getElementById('new-submit');
 const openProjectBtn = document.getElementById('open-project');
 const saveProjectBtn = document.getElementById('save-button');
 var helpButton = document.getElementById("help-button");
 var helpContent = document.getElementById("help-content");
+var newButton = document.getElementById("new-button");
+var newOptions = document.getElementById("new-options");
+var hideSave = document.getElementById("hidesave");
 const canvas = document.getElementById('my-canvas');
 const context = canvas.getContext('2d');
 const scrollX = canvas.scrollLeft;
@@ -14,6 +18,8 @@ let menuOpen = false;
 canvas.style.position = 'absolute';
 canvas.style.top = backgroundImage.offsetTop + 'px';
 canvas.style.left = backgroundImage.offsetLeft + 'px';
+const gameModeSelect = document.getElementById('game-mode');
+const mapSelect = document.getElementById('map');
 
 
 
@@ -32,11 +38,35 @@ newProjectBtn.addEventListener('click', function () {
             canvas.height = image.height;
             backgroundImage.src = image.src;
             redrawCanvas();
+            newOptions.style.display = "none";
+            hideSave.style.display = "inline-block";
         };
     });
     // trigger a click event on the imageInput to open the file picker dialog
     imageInput.click();
 });
+
+// New Collection Submit button logic and configuration
+newSubmitBtn.addEventListener('click', function () {
+  points = [];
+  const selectedGameMode = gameModeSelect.value;
+  const selectedMap = mapSelect.value;
+  const imagePath = "Map Images/" + selectedGameMode + "/" + selectedMap + ".png";
+  const image = new Image();
+  image.src = imagePath;
+
+  image.onload = function () {
+    canvas.width = image.width;
+    canvas.height = image.height;
+    backgroundImage.src = image.src;
+    redrawCanvas();
+    newOptions.style.display = "none";
+    hideSave.style.display = "inline-block";
+  };
+});
+
+
+
 
 
 // Load Button logic and configuration
@@ -59,6 +89,7 @@ openProjectBtn.addEventListener('click', function () {
                 backgroundImage.src = image.src;
                 points = data.points;
                 redrawCanvas();
+                hideSave.style.display = "inline-block";
             };
             image.src = data.image;
         };
@@ -78,7 +109,7 @@ canvas.addEventListener('click', function (event) {
       for (let i = 0; i < points.length; i++) {
         const point = points[i];
         const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
-        if (distance <= 5) {
+        if (distance <= 6) {
           const confirmDelete = confirm('Are you sure you want to delete?');
           if (confirmDelete) {
             points.splice(i, 1);
@@ -94,7 +125,7 @@ canvas.addEventListener('click', function (event) {
         const point = points[i];
         const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
   
-        if (distance <= 5) {
+        if (distance <= 6) {
           // check if document.execCommand() is available before using it
           if (document.queryCommandSupported('copy')) {
             const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
@@ -152,7 +183,7 @@ canvas.addEventListener('click', function (event) {
         const option1 = document.createElement('option');
         option1.value = '#ff0000';
         option1.textContent = 'Spawn';
-        option1.style.backgroundColor = '#ff0000';
+        option1.style.backgroundColor = '#ff3526';
         option1.style.fontWeight = "bold";
         const option2 = document.createElement('option');
         option2.value = '#eaff00';
@@ -338,3 +369,55 @@ helpButton.addEventListener("click", function() {
   });
 
   
+newButton.addEventListener("click", function() {
+  if (newOptions.style.display === "none") {
+    newOptions.style.display = "block";
+  } else {
+    newOptions.style.display = "none";
+  }
+});
+
+gameModeSelect.addEventListener('change', function() {
+  const selectedGameMode = gameModeSelect.value;
+  mapSelect.innerHTML = '';
+
+  if (selectedGameMode === 'select') {
+    const mapOptions = ['Please select a game mode'];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  } else if (selectedGameMode === 'conquest') {
+    const mapOptions = ['Arica Harbor Medium', 'Arica Harbor Small', 'Breakaway Small', "Caspian Border Medium", "Caspian Border Small", "Discarded Small", "Exposure Medium", "Manifest Medium", "Orbital Medium", "Renewal Medium", "Renewal Small", "Spearhead Medium", "Stranded Medium", "Stranded Small"];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  } else if (selectedGameMode === 'tdm') {
+    const mapOptions = ['Coming Soon...'];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  } else if (selectedGameMode === 'ffa') {
+    const mapOptions = ['Coming Soon...'];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  }
+});
+
+mapSelect.addEventListener('change', function() {
+  const selectedGameMode = gameModeSelect.value;
+  const selectedMapOption = mapSelect.value;
+  const imagePath = `Map Images/${selectedGameMode}/${selectedMapOption}.png`;
+});
