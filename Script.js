@@ -51,7 +51,7 @@ newSubmitBtn.addEventListener('click', function () {
   points = [];
   const selectedGameMode = gameModeSelect.value;
   const selectedMap = mapSelect.value;
-  const imagePath = "Map Images/" + selectedGameMode + "/" + selectedMap + ".png";
+  const imagePath = "https://github.com/andy6170/BFCoordinateFinder/blob/main/Map%20Images/" + selectedGameMode + "/" + selectedMap + ".png?raw=true";
   const image = new Image();
   image.src = imagePath;
 
