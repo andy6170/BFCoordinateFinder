@@ -389,7 +389,7 @@ gameModeSelect.addEventListener('change', function() {
       optionElement.textContent = mapOption;
       mapSelect.appendChild(optionElement);
     }
-  } else if (selectedGameMode === 'conquest') {
+  } else if (selectedGameMode === 'Conquest') {
     const mapOptions = ['Arica Harbor Medium', 'Arica Harbor Small', 'Breakaway Small', "Caspian Border Medium", "Caspian Border Small", "Discarded Small", "Exposure Medium", "Manifest Medium", "Orbital Medium", "Renewal Medium", "Renewal Small", "Spearhead Medium", "Stranded Medium", "Stranded Small"];
     for (const mapOption of mapOptions) {
       const optionElement = document.createElement('option');
@@ -397,7 +397,7 @@ gameModeSelect.addEventListener('change', function() {
       optionElement.textContent = mapOption;
       mapSelect.appendChild(optionElement);
     }
-  } else if (selectedGameMode === 'tdm') {
+  } else if (selectedGameMode === 'TDM') {
     const mapOptions = ['Coming Soon...'];
     for (const mapOption of mapOptions) {
       const optionElement = document.createElement('option');
@@ -405,7 +405,7 @@ gameModeSelect.addEventListener('change', function() {
       optionElement.textContent = mapOption;
       mapSelect.appendChild(optionElement);
     }
-  } else if (selectedGameMode === 'ffa') {
+  } else if (selectedGameMode === 'FFA') {
     const mapOptions = ['Coming Soon...'];
     for (const mapOption of mapOptions) {
       const optionElement = document.createElement('option');
