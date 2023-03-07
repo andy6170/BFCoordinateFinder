@@ -30,6 +30,8 @@ const gameModeSelect = document.getElementById('game-mode');
 const saveSelect = document.getElementById('game-mode-save');
 const mapSelect = document.getElementById('map');
 const mapSaveSelect = document.getElementById('map-save');
+canvas.width = "0px";
+canvas.height = "0px";
 
 
 
