@@ -10,7 +10,10 @@ var helpContent = document.getElementById("help-content");
 var newButton = document.getElementById("new-button");
 var newOptions = document.getElementById("new-options");
 var loadOptions = document.getElementById("load-options");
+var newSubmit = document.getElementById("new-submit");
 var hideSave = document.getElementById("hidesave");
+var loadSubmit = document.getElementById("load-submit");
+var openProject = document.getElementById("open-project");
 var saveButton = document.getElementById("save-button");
 const canvas = document.getElementById('my-canvas');
 const context = canvas.getContext('2d');
@@ -56,12 +59,19 @@ newProjectBtn.addEventListener('click', function () {
 
 // New Collection Submit button logic and configuration
 newSubmitBtn.addEventListener('click', function () {
+  newSubmit.style.backgroundColor = "rgb(158, 158, 158)";
+  newSubmit.innerHTML = "Loading";
   points = [];
   const selectedGameMode = gameModeSelect.value;
   const selectedMap = mapSelect.value;
   const imagePath = "Map Images/" + selectedGameMode + "/" + selectedMap + ".png";
   const image = new Image();
   image.src = imagePath;
+
+  image.onerror = function () {
+    newSubmit.innerHTML = "Submit";
+    newSubmit.style.backgroundColor = "rgb(255, 255, 255)";
+  };
 
   image.onload = function () {
     canvas.width = image.width;
@@ -71,6 +81,8 @@ newSubmitBtn.addEventListener('click', function () {
     newOptions.style.display = "none";
     hideSave.style.display = "inline-block";
     newButton.style.backgroundColor = "cyan";
+    newSubmit.innerHTML = "Submit";
+    newSubmit.style.backgroundColor = "rgb(255, 255, 255)";
   };
 });
 
@@ -81,6 +93,8 @@ newSubmitBtn.addEventListener('click', function () {
 
 // Load file from collection and drop down list
 loadSubmitBtn.addEventListener('click', function () {
+  loadSubmit.style.backgroundColor = "rgb(158, 158, 158)";
+  loadSubmit.innerHTML = "Loading";
   const selectedSave = saveSelect.value;
   const selectedSaveOption = mapSaveSelect.value;
   fetch(`Map Coordinate Files/${selectedSave}/${selectedSaveOption}.json`)
@@ -99,40 +113,46 @@ loadSubmitBtn.addEventListener('click', function () {
     };
     image.src = data.image;
   })
-  .catch(error => console.error(error));
+  .catch(error => {
+    console.error(error);
+    loadSubmit.innerHTML = "Submit";
+    loadSubmit.style.backgroundColor = "rgb(255, 255, 255)";
+  });
 });
 
 
 // Load Button logic and configuration
 openProjectBtn.addEventListener('click', function () {
-    points = [];
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-    input.onchange = function () {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        const file = this.files[0];
-        const reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = function () {
-            const data = JSON.parse(reader.result);
-            const image = new Image();
-            image.onload = function () {
-                canvas.width = image.width;
-                canvas.height = image.height;
-                backgroundImage.src = image.src;
-                points = data.points;
-                redrawCanvas();
-                hideSave.style.display = "inline-block";
-            };
-            image.src = data.image;
-        };
-    };
-    input.click();
-    loadOptions.style.display = "none";
-    loadButton.style.backgroundColor = "cyan";
+  points = [];
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json';
+  let isAborted = false;
+  input.onchange = function () {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      const file = this.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = function () {
+          if (!isAborted) {
+              const data = JSON.parse(reader.result);
+              const image = new Image();
+              image.onload = function () {
+                  canvas.width = image.width;
+                  canvas.height = image.height;
+                  backgroundImage.src = image.src;
+                  points = data.points;
+                  redrawCanvas();
+                  hideSave.style.display = "inline-block";
+                  loadOptions.style.display = "none";
+                  loadButton.style.backgroundColor = "cyan";
+              };
+              image.src = data.image;
+          }
+      };
+  };
+  input.click();
 });
-
 
 
 
