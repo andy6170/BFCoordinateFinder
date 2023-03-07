@@ -60,6 +60,34 @@ a {
 
   }
 
+  .newbutton {
+    background-color: rgb(0, 255, 255);
+    color: black;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "BatlefieldFont", sans-serif;
+    display: inline-block;
+
+  }
+
+  .loadbutton {
+    background-color: rgb(0, 255, 255);
+    color: black;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "BatlefieldFont", sans-serif;
+    display: inline-block;
+
+  }
+
   .extrabutton {
     background-color: rgb(255, 255, 255);
     color: black;
@@ -70,7 +98,7 @@ a {
     font-size: 16px;
     font-weight: bold;
     font-family: "BatlefieldFont", sans-serif;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-right: 353px;
   }
 
