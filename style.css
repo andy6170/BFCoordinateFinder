@@ -30,7 +30,7 @@ a {
 #canvas-wrapper {
 	position: relative;
 	overflow: scroll;
-	height: 200%;
+	height: calc(100vh - 160px); /* adjust the value based on the height of the header and buttons */
   margin-top: 10px;
 }
 
