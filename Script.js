@@ -110,6 +110,8 @@ loadSubmitBtn.addEventListener('click', function () {
       hideSave.style.display = "inline-block";
       loadOptions.style.display = "none";
       loadButton.style.backgroundColor = "cyan";
+      loadSubmit.innerHTML = "Submit";
+      loadSubmit.style.backgroundColor = "rgb(255, 255, 255)";
     };
     image.src = data.image;
   })
