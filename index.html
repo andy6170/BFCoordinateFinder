@@ -11,8 +11,8 @@
 <body>
     <h1>Battlefield Coordinate Finder 9000</h1>
     <hr width=520px;>
-    <button id="new-button" class="button">New</button>
-    <button id="open-project" class="button">Open</button>
+    <button id="new-button" class="newbutton">New</button>
+    <button id="load-button" class="loadbutton">Load</button>
     <div id="hidesave" style="display: none;">
     <button id="save-button" class="button">Save</button>
     </div>
@@ -36,8 +36,30 @@
     </select>
     </div>
     <button id="new-submit" class="extrabutton">Submit</button>
-    <button id="new-import" class="extrabutton">Import</button>
+    <button id="new-upload" class="extrabutton">Import</button>
     </div>
+
+    <div id="load-options" style="display: none;">
+      <p>Load a file from the collection or import your own file</p>
+      <hr width=520px;>
+      <div>
+      <label for="game-mode-save">Game Mode: </label>
+      <select id="game-mode-save">
+        <option value="select">Please select..</option>
+        <option value="Conquest">Conquest</option>
+        <option value="TDM">Team Deathmatch</option>
+        <option value="FFA">Free For All</option>
+      </select>
+      </div>
+      <div>
+      <label for="map-save">Map: </label>
+      <select id="map-save">
+        <option value="">Please select a game mode</option>
+      </select>
+      </div>
+      <button id="load-submit" class="extrabutton">Submit</button>
+      <button id="open-project" class="extrabutton">Import</button>
+      </div>
 
     <div id="help-content" style="display: none;">
         <hr width=520px;>

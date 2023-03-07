@@ -1,12 +1,17 @@
-const newProjectBtn = document.getElementById('new-import');
+const newProjectBtn = document.getElementById('new-upload');
 const newSubmitBtn = document.getElementById('new-submit');
+const loadSubmitBtn = document.getElementById('load-submit');
 const openProjectBtn = document.getElementById('open-project');
 const saveProjectBtn = document.getElementById('save-button');
+const loadProjectBtn = document.getElementById('load-button');
 var helpButton = document.getElementById("help-button");
+var loadButton = document.getElementById("load-button");
 var helpContent = document.getElementById("help-content");
 var newButton = document.getElementById("new-button");
 var newOptions = document.getElementById("new-options");
+var loadOptions = document.getElementById("load-options");
 var hideSave = document.getElementById("hidesave");
+var saveButton = document.getElementById("save-button");
 const canvas = document.getElementById('my-canvas');
 const context = canvas.getContext('2d');
 const scrollX = canvas.scrollLeft;
@@ -19,7 +24,9 @@ canvas.style.position = 'absolute';
 canvas.style.top = backgroundImage.offsetTop + 'px';
 canvas.style.left = backgroundImage.offsetLeft + 'px';
 const gameModeSelect = document.getElementById('game-mode');
+const saveSelect = document.getElementById('game-mode-save');
 const mapSelect = document.getElementById('map');
+const mapSaveSelect = document.getElementById('map-save');
 
 
 
@@ -40,6 +47,7 @@ newProjectBtn.addEventListener('click', function () {
             redrawCanvas();
             newOptions.style.display = "none";
             hideSave.style.display = "inline-block";
+            newButton.style.backgroundColor = "cyan";
         };
     });
     // trigger a click event on the imageInput to open the file picker dialog
@@ -62,11 +70,37 @@ newSubmitBtn.addEventListener('click', function () {
     redrawCanvas();
     newOptions.style.display = "none";
     hideSave.style.display = "inline-block";
+    newButton.style.backgroundColor = "cyan";
   };
 });
 
 
 
+
+
+
+// Load file from collection and drop down list
+loadSubmitBtn.addEventListener('click', function () {
+  const selectedSave = saveSelect.value;
+  const selectedSaveOption = mapSaveSelect.value;
+  fetch(`Map Coordinate Files/${selectedSave}/${selectedSaveOption}.json`)
+  .then(response => response.json())
+  .then(data => {
+    const image = new Image();
+    image.onload = function () {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      backgroundImage.src = image.src;
+      points = data.points;
+      redrawCanvas();
+      hideSave.style.display = "inline-block";
+      loadOptions.style.display = "none";
+      loadButton.style.backgroundColor = "cyan";
+    };
+    image.src = data.image;
+  })
+  .catch(error => console.error(error));
+});
 
 
 // Load Button logic and configuration
@@ -95,7 +129,15 @@ openProjectBtn.addEventListener('click', function () {
         };
     };
     input.click();
+    loadOptions.style.display = "none";
+    loadButton.style.backgroundColor = "cyan";
 });
+
+
+
+
+
+
 
 canvas.addEventListener('click', function (event) {
     const x = event.offsetX;
@@ -313,6 +355,7 @@ function redrawCanvas() {
 
 // Save Button Function
 saveProjectBtn.addEventListener('click', async function () {
+    saveButton.style.backgroundColor = "rgb(0, 155, 155)";
     context.drawImage(backgroundImage, 0, 0);
     const data = {
         points: points,
@@ -358,13 +401,16 @@ saveProjectBtn.addEventListener('click', async function () {
         context.fillStyle = point.selectedItem;
         context.fill();
       }
+      saveButton.style.backgroundColor = "cyan";
 });
 
 helpButton.addEventListener("click", function() {
     if (helpContent.style.display === "none") {
       helpContent.style.display = "block";
+      helpButton.style.backgroundColor = "rgb(201, 137, 0)";
     } else {
       helpContent.style.display = "none";
+      helpButton.style.backgroundColor = "rgb(255, 174, 0)";
     }
   });
 
@@ -372,10 +418,31 @@ helpButton.addEventListener("click", function() {
 newButton.addEventListener("click", function() {
   if (newOptions.style.display === "none") {
     newOptions.style.display = "block";
+    loadOptions.style.display = "none";
+    newButton.style.backgroundColor = "rgb(0, 155, 155)";
+    loadButton.style.backgroundColor = "cyan";
   } else {
     newOptions.style.display = "none";
+    newButton.style.backgroundColor = "cyan";
   }
 });
+
+loadButton.addEventListener("click", function() {
+  if (loadOptions.style.display === "none") {
+    loadOptions.style.display = "block";
+    newOptions.style.display = "none";
+    loadButton.style.backgroundColor = "rgb(0, 155, 155)";
+    newButton.style.backgroundColor = "cyan";
+  } else {
+    loadOptions.style.display = "none";
+    loadButton.style.backgroundColor = "cyan";
+  }
+});
+
+
+
+
+
 
 gameModeSelect.addEventListener('change', function() {
   const selectedGameMode = gameModeSelect.value;
@@ -420,4 +487,54 @@ mapSelect.addEventListener('change', function() {
   const selectedGameMode = gameModeSelect.value;
   const selectedMapOption = mapSelect.value;
   const imagePath = `Map Images/${selectedGameMode}/${selectedMapOption}.png`;
+});
+
+
+
+
+
+
+
+saveSelect.addEventListener('change', function() {
+  const selectedSave = saveSelect.value;
+  mapSaveSelect.innerHTML = '';
+
+  if (selectedSave === 'select') {
+    const mapSaveOptions = ['Please select a game mode'];
+    for (const mapSaveOption of mapSaveOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapSaveOption;
+      optionElement.textContent = mapSaveOption;
+      mapSaveSelect.appendChild(optionElement);
+    }
+  } else if (selectedSave === 'Conquest') {
+    const mapSaveOptions = ['Arica Harbor Medium', 'Arica Harbor Small', 'Breakaway Small', "Caspian Border Medium", "Caspian Border Small", "Discarded Small", "Exposure Medium", "Manifest Medium", "Orbital Medium", "Renewal Medium", "Renewal Small", "Spearhead Medium", "Stranded Medium", "Stranded Small"];
+    for (const mapSaveOption of mapSaveOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapSaveOption;
+      optionElement.textContent = mapSaveOption;
+      mapSaveSelect.appendChild(optionElement);
+    }
+  } else if (selectedSave === 'TDM') {
+    const mapSaveOptions = ['Coming Soon...'];
+    for (const mapSaveOption of mapSaveOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapSaveOption;
+      optionElement.textContent = mapSaveOption;
+      mapSaveSelect.appendChild(optionElement);
+    }
+  } else if (selectedSave === 'FFA') {
+    const mapSaveOptions = ['Coming Soon...'];
+    for (const mapSaveOption of mapSaveOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapSaveOption;
+      optionElement.textContent = mapSaveOption;
+      mapSaveSelect.appendChild(optionElement);
+    }
+  }
+});
+
+mapSaveSelect.addEventListener('change', function() {
+  const selectedSave = saveSelect.value;
+  const selectedSaveOption = mapSaveSelect.value;
 });
