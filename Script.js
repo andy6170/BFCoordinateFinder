@@ -61,7 +61,7 @@ newProjectBtn.addEventListener('click', function () {
 
 // New Collection Submit button logic and configuration
 newSubmitBtn.addEventListener('click', function () {
-  newSubmit.style.backgroundColor = "rgb(158, 158, 158)";
+  newSubmit.style.backgroundColor = "rgb(148, 148, 148)";
   newSubmit.innerHTML = "Loading";
   points = [];
   const selectedGameMode = gameModeSelect.value;
@@ -72,7 +72,7 @@ newSubmitBtn.addEventListener('click', function () {
 
   image.onerror = function () {
     newSubmit.innerHTML = "Submit";
-    newSubmit.style.backgroundColor = "rgb(255, 255, 255)";
+    newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
   };
 
   image.onload = function () {
@@ -84,7 +84,7 @@ newSubmitBtn.addEventListener('click', function () {
     hideSave.style.display = "inline-block";
     newButton.style.backgroundColor = "cyan";
     newSubmit.innerHTML = "Submit";
-    newSubmit.style.backgroundColor = "rgb(255, 255, 255)";
+    newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
   };
 });
 
@@ -95,7 +95,7 @@ newSubmitBtn.addEventListener('click', function () {
 
 // Load file from collection and drop down list
 loadSubmitBtn.addEventListener('click', function () {
-  loadSubmit.style.backgroundColor = "rgb(158, 158, 158)";
+  loadSubmit.style.backgroundColor = "rgb(148, 148, 148)";
   loadSubmit.innerHTML = "Loading";
   const selectedSave = saveSelect.value;
   const selectedSaveOption = mapSaveSelect.value;
@@ -113,14 +113,14 @@ loadSubmitBtn.addEventListener('click', function () {
       loadOptions.style.display = "none";
       loadButton.style.backgroundColor = "cyan";
       loadSubmit.innerHTML = "Submit";
-      loadSubmit.style.backgroundColor = "rgb(255, 255, 255)";
+      loadSubmit.style.backgroundColor = "rgb(74, 74, 74)";
     };
     image.src = data.image;
   })
   .catch(error => {
     console.error(error);
     loadSubmit.innerHTML = "Submit";
-    loadSubmit.style.backgroundColor = "rgb(255, 255, 255)";
+    loadSubmit.style.backgroundColor = "rgb(74, 74, 74)";
   });
 });
 
@@ -250,16 +250,19 @@ canvas.addEventListener('click', function (event) {
         option1.value = '#ff0000';
         option1.textContent = 'Spawn';
         option1.style.backgroundColor = '#ff3526';
+        option1.style.color = 'black';
         option1.style.fontWeight = "bold";
         const option2 = document.createElement('option');
         option2.value = '#eaff00';
         option2.textContent = 'MCOM';
         option2.style.backgroundColor = '#eaff00';
+        option2.style.color = 'black';
         option2.style.fontWeight = "bold";
         const option3 = document.createElement('option');
         option3.value = '#03f7ff';
         option3.textContent = 'Other';
         option3.style.backgroundColor = '#03f7ff';
+        option3.style.color = 'black';
         option3.style.fontWeight = "bold";
       
         selectField.appendChild(option1);
@@ -271,6 +274,7 @@ canvas.addEventListener('click', function (event) {
         }
 
         selectField.style.backgroundColor = selectField.value
+        selectField.style.color = 'black';
       
         selectField.addEventListener('change', function() {
           selectField.style.backgroundColor = selectField.value;
