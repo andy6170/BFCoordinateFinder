@@ -40,7 +40,7 @@ a {
 	left: 0;
 }
 
-.button, .newbutton, .loadbutton {
+.button, .newbutton, .loadbutton, .listbutton{
     background-color: rgb(0, 255, 255);
     color: black;
     padding: 5px 15px;
