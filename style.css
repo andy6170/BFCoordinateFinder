@@ -34,19 +34,13 @@ a {
   margin-top: 10px;
 }
 
-#background-image {
+#background-image, #my-canvas {
 	position: absolute;
 	top: 0;
 	left: 0;
 }
 
-#my-canvas {
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-.button {
+.button, .newbutton, .loadbutton {
     background-color: rgb(0, 255, 255);
     color: black;
     padding: 5px 15px;
@@ -60,35 +54,7 @@ a {
 
   }
 
-  .newbutton {
-    background-color: rgb(0, 255, 255);
-    color: black;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: "BatlefieldFont", sans-serif;
-    display: inline-block;
-
-  }
-
-  .loadbutton {
-    background-color: rgb(0, 255, 255);
-    color: black;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: "BatlefieldFont", sans-serif;
-    display: inline-block;
-
-  }
-
-  .extrabutton {
+  .extrabutton, .extrabutton2 {
     background-color: rgb(74, 74, 74);
     color: rgb(255, 255, 255);
     padding: 5px 15px;
@@ -103,18 +69,14 @@ a {
     position: relative;
   }
 
-  .extrabutton2 {
-    background-color: rgb(74, 74, 74);
-    color: rgb(255, 255, 255);
-    padding: 5px 15px;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    font-family: "BatlefieldFont", sans-serif;
-    position: absolute;
+  .extrabutton {
+    margin-top: 0px;
+    left: 105px;
+    position: relative;
+  }
 
+  .extrabutton2 {
+    position: absolute;
     left: 447px; /* adjust this value to position the button horizontally */
     z-index: 9999; /* make sure the button is on top of other elements */
   }
@@ -133,30 +95,33 @@ a {
     position: absolute;
     top: 64px; /* adjust this value to position the button vertically */
     left: 400px; /* adjust this value to position the button horizontally */
-    z-index: 9999; /* make sure the button is on top of other elements */
+    /* make sure the button is on top of other elements */
 
-  }
-  .map-selection {
-    position: relative;
-    left: 62px;
-  }
+}
 
-
+.map-selection {
+  position: relative;
+  left: 62px;
+}
 
 hr {
     border: 1px solid cyan;
 
 	margin: 10px auto 10px 0;
-  }
+}
 
 label {
     font-size: 18px;
-  }
+}
 
 select {
-
+    cursor: pointer;
     margin-bottom: 5px;
     font-family: "BatlefieldFont", sans-serif;
     background-color: rgb(74, 74, 74);
     color: rgb(255, 255, 255);
-  }
+}
+
+button {
+    cursor: pointer;
+}

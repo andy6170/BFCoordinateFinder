@@ -164,56 +164,188 @@ openProjectBtn.addEventListener('click', function () {
 
 
 canvas.addEventListener('click', function (event) {
-    const x = event.offsetX;
-    const y = event.offsetY;
-    const scrollX = canvas.scrollLeft;
-    const scrollY = canvas.scrollTop;
-    const truex = event.clientX + window.scrollX;
-    const truey = event.clientY + window.scrollY;
+  const x = event.offsetX;
+  const y = event.offsetY;
+  const scrollX = canvas.scrollLeft;
+  const scrollY = canvas.scrollTop;
+  const truex = event.clientX + window.scrollX;
+  const truey = event.clientY + window.scrollY;
   
-    if (event.ctrlKey) {
-      for (let i = 0; i < points.length; i++) {
-        const point = points[i];
-        const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
-        if (distance <= 6) {
-          const confirmDelete = confirm('Are you sure you want to delete?');
-          if (confirmDelete) {
-            points.splice(i, 1);
-            redrawCanvas(); // redraw the canvas with the updated points array
-          }
+
+  let clickedCircle = false;
+  
+  for (let i = 0; i < points.length; i++) {
+    const point = points[i];
+    const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+  
+    if (distance <= 6  && !menuOpen) {
+      menuOpen = true;
+      // check if document.execCommand() is available before using it
+      copyToClipboard(point);
+      clickedCircle = true;
+      const menu = document.createElement('div');
+      menu.style.position = 'absolute';
+      menu.style.top = '50%';
+      menu.style.left = '50%';
+      menu.style.transform = 'translate(-50%, -50%)';
+      menu.style.backgroundColor = '#292929';
+      menu.style.border = '3px solid #141414';
+      menu.style.padding = '14px';
+      menu.style.display = 'flex';
+      menu.style.flexDirection = 'column';
+      menu.style.alignItems = 'center';
+      menu.style.justifyContent = 'center';
+
+      const coordinatesLabel = document.createElement('label');
+      coordinatesLabel.style.color = '#00ffff';
+      coordinatesLabel.style.marginBottom = '14px';
+      coordinatesLabel.textContent = 'Copied to Clipboard:';
+
+      const coordinatesField = document.createElement('input');
+      coordinatesField.type = 'text';
+      coordinatesField.value = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord}`;
+      coordinatesField.style.width = '100%';
+      coordinatesField.style.marginBottom = '9px';
+      coordinatesField.style.textAlign = 'center';
+      coordinatesField.style.backgroundColor = '#141414';
+      coordinatesField.style.color = '#fff';
+      coordinatesField.style.border = 'none';
+      coordinatesField.style.padding = '9px';
+      coordinatesField.style.borderRadius = '3px';
+      coordinatesField.readOnly = true;
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.display = 'flex';
+      buttonContainer.style.width = '100%';
+      buttonContainer.style.justifyContent = 'space-between';
+
+      const closeButton = document.createElement('button');
+      closeButton.textContent = 'Close';
+      closeButton.style.backgroundColor = '#00ffff';
+      closeButton.style.fontFamily = 'BatlefieldFont';
+      closeButton.style.fontSize = '18px';
+      closeButton.style.marginTop = "5px";
+      closeButton.style.borderRadius = '4px';
+      closeButton.style.display = 'inline-block';
+      closeButton.style.border = '3px';
+      closeButton.addEventListener('click', function () {
+          menu.remove();
+          menuOpen = false;
+      });
+
+
+
+
+
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.style.backgroundColor = '#ff3838';
+      deleteButton.style.fontFamily = 'BatlefieldFont';
+      deleteButton.style.fontSize = '18px';
+      deleteButton.style.marginTop = "5px";
+      deleteButton.style.borderRadius = '4px';
+      deleteButton.style.display = 'inline-block';
+      deleteButton.style.border = '3px';
+      deleteButton.addEventListener('click', function () {
+        // Create a new menu element
+        const confirmMenu = document.createElement('div');
+        confirmMenu.style.position = 'absolute';
+        confirmMenu.style.top = '0';
+        confirmMenu.style.left = '0';
+        confirmMenu.style.width = '100%';
+        confirmMenu.style.height = '100%';
+        confirmMenu.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        confirmMenu.style.display = 'flex';
+        confirmMenu.style.justifyContent = 'center';
+        confirmMenu.style.alignItems = 'center';
+        confirmMenu.style.flexDirection = 'column'
+      
+        // Create a message container element
+        const messageContainer = document.createElement('div');
+        messageContainer.style.textAlign = 'center';
+        messageContainer.style.marginBottom = '20px';
+      
+        // Create a message element
+        const message = document.createElement('div');
+        message.textContent = 'Are you sure you want to delete?';
+        message.style.fontFamily = 'BatlefieldFont';
+        message.style.fontSize = '18px';
+        message.style.color = '#fff';
+      
+        // Create a confirm button
+        const confirmButton = document.createElement('button');
+        confirmButton.textContent = 'Yes';
+        confirmButton.style.backgroundColor = '#ff3838';
+        confirmButton.style.fontFamily = 'BatlefieldFont';
+        confirmButton.style.fontSize = '18px';
+        confirmButton.style.borderRadius = '4px';
+        confirmButton.style.border = '3px';
+        confirmButton.style.marginRight = '10px';
+        confirmButton.addEventListener('click', function () {
+          // User confirmed deletion, perform the deletion process
+          points.splice(i, 1);
+          redrawCanvas();
+          confirmMenu.remove();
+          menu.remove();
+          menuOpen = false;
+        });
+      
+        // Create a cancel button
+        const cancelButton = document.createElement('button');
+        cancelButton.textContent = 'No';
+        cancelButton.style.backgroundColor = '#4CAF50';
+        cancelButton.style.fontFamily = 'BatlefieldFont';
+        cancelButton.style.fontSize = '18px';
+        cancelButton.style.borderRadius = '4px';
+        cancelButton.style.border = '3px';
+        cancelButton.addEventListener('click', function () {
+          // User canceled deletion, remove the confirm menu
+          confirmMenu.remove();
+        });
+      
+        // Create a button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.justifyContent = 'center';
+        buttonContainer.style.alignItems = 'center';
+        buttonContainer.style.flexDirection = 'row'; // Add this line to display buttons horizontally
+      
+        // Add the message and buttons to their respective containers
+        messageContainer.appendChild(message);
+        buttonContainer.appendChild(confirmButton);
+        buttonContainer.appendChild(cancelButton);
+        confirmMenu.appendChild(messageContainer);
+        confirmMenu.appendChild(buttonContainer);
+      
+        // Add the confirm menu to the page
+        document.body.appendChild(confirmMenu);
+      });
+      
+      
+      buttonContainer.appendChild(deleteButton);
+      buttonContainer.appendChild(closeButton);
+      
+      menu.appendChild(coordinatesLabel);
+      menu.appendChild(coordinatesField);
+      menu.appendChild(buttonContainer);
+      
+      document.body.appendChild(menu);
+      
           break;
         }
       }
-    } else {
-      let clickedCircle = false;
   
-      for (let i = 0; i < points.length; i++) {
-        const point = points[i];
-        const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
-  
-        if (distance <= 6) {
-          // check if document.execCommand() is available before using it
-          if (document.queryCommandSupported('copy')) {
-            const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
-            const temp = document.createElement('textarea');
-            temp.textContent = code;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-            console.log('Text copied to clipboard');
-  
-            const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
-            alert(coords);
-          } else {
-            console.warn('Copy command is not available.');
-          }
-  
-          clickedCircle = true;
-          break;
-        }
-      }
-  
+
+
+
+
+
+
+
+
+
+
       if (!clickedCircle && !menuOpen) {
         menuOpen = true;
         const lastSelectedValue = localStorage.getItem('lastSelectedValue');
@@ -246,28 +378,22 @@ canvas.addEventListener('click', function (event) {
         selectLabel.style.lineHeight = "2";
         const selectField = document.createElement('select');
         selectField.style.fontWeight = "bold";
-        const option1 = document.createElement('option');
-        option1.value = '#ff0000';
-        option1.textContent = 'Spawn';
-        option1.style.backgroundColor = '#ff3526';
-        option1.style.color = 'black';
-        option1.style.fontWeight = "bold";
-        const option2 = document.createElement('option');
-        option2.value = '#eaff00';
-        option2.textContent = 'MCOM';
-        option2.style.backgroundColor = '#eaff00';
-        option2.style.color = 'black';
-        option2.style.fontWeight = "bold";
-        const option3 = document.createElement('option');
-        option3.value = '#03f7ff';
-        option3.textContent = 'Other';
-        option3.style.backgroundColor = '#03f7ff';
-        option3.style.color = 'black';
-        option3.style.fontWeight = "bold";
-      
-        selectField.appendChild(option1);
-        selectField.appendChild(option2);
-        selectField.appendChild(option3);
+
+        const options = [
+          { value: '#ff0000', label: 'Spawn', backgroundColor: '#ff3526' },
+          { value: '#eaff00', label: 'MCOM', backgroundColor: '#eaff00' },
+          { value: '#03f7ff', label: 'Other', backgroundColor: '#03f7ff' },
+        ];
+
+        options.forEach(option => {
+          const optionElement = document.createElement('option');
+          optionElement.value = option.value;
+          optionElement.textContent = option.label;
+          optionElement.style.backgroundColor = option.backgroundColor;
+          optionElement.style.color = 'black';
+          optionElement.style.fontWeight = "bold";
+          selectField.appendChild(optionElement);
+        });
 
         if (lastSelectedValue) {
           selectField.value = lastSelectedValue;
@@ -287,10 +413,10 @@ canvas.addEventListener('click', function (event) {
         submitButton.style.fontFamily = "BatlefieldFont";
         submitButton.style.fontSize = "18px";
         submitButton.style.marginTop = "5px";
+        submitButton.style.borderRadius = '4px';
+        submitButton.style.border = '3px';
         submitButton.addEventListener('click', function () {
-          const xCoord = inputField.value.split(' ')[0];
-          const yCoord = inputField.value.split(' ')[1];
-          const zCoord = inputField.value.split(' ')[2];
+          const [xCoord, yCoord, zCoord] = inputField.value.split(' ');
           const selectedItem = selectField.value;
       
           points.push({ x, y, xCoord, yCoord, zCoord, selectedItem });
@@ -318,6 +444,8 @@ canvas.addEventListener('click', function (event) {
         cancelButton.style.fontSize = "18px";
         cancelButton.style.marginTop = "5px";
         cancelButton.style.marginLeft = "10px";
+        cancelButton.style.borderRadius = '4px';
+        cancelButton.style.border = '3px';
         cancelButton.addEventListener('click', function () {
           inputContainer.remove();
           menuOpen = false;
@@ -336,10 +464,31 @@ canvas.addEventListener('click', function (event) {
 
         inputField.focus();
       }
-
-    }
 });
-  
+
+
+
+
+
+// function to handle copying point data to the clipboard
+function copyToClipboard(point) {
+  if (document.queryCommandSupported('copy')) {
+    const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
+    const temp = document.createElement('textarea');
+    temp.textContent = code;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand('copy');
+    document.body.removeChild(temp);
+    console.log('Text copied to clipboard');
+
+    const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
+    //alert(coords);
+  } else {
+    console.warn('Copy command is not available.');
+  }
+}
+
 function redrawCanvas() {
     // Draws the image
     context.drawImage(backgroundImage, 0, 0);
@@ -353,6 +502,10 @@ function redrawCanvas() {
       context.fill();
     }
   }
+
+
+
+
 
   canvas.addEventListener('mousemove', function (event) {
     const x = event.offsetX;
@@ -380,6 +533,10 @@ function redrawCanvas() {
         canvas.style.cursor = 'default';
     }
 });
+
+
+
+
 
 // Save Button Function
 saveProjectBtn.addEventListener('click', async function () {
@@ -432,10 +589,14 @@ saveProjectBtn.addEventListener('click', async function () {
       saveButton.style.backgroundColor = "cyan";
 });
 
+
+
+
+
 helpButton.addEventListener("click", function() {
     if (helpContent.style.display === "none") {
       helpContent.style.display = "block";
-      helpButton.style.backgroundColor = "rgb(201, 137, 0)";
+      helpButton.style.backgroundColor = "rgb(161, 117, 0)";
     } else {
       helpContent.style.display = "none";
       helpButton.style.backgroundColor = "rgb(255, 174, 0)";
@@ -566,3 +727,5 @@ mapSaveSelect.addEventListener('change', function() {
   const selectedSave = saveSelect.value;
   const selectedSaveOption = mapSaveSelect.value;
 });
+
+
