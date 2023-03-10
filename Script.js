@@ -23,6 +23,7 @@ const backgroundImage = document.getElementById('background-image');
 let points = [];
 let projectName = '';
 let menuOpen = false;
+let errorAdded = false;
 canvas.style.position = 'absolute';
 canvas.style.top = backgroundImage.offsetTop + 'px';
 canvas.style.left = backgroundImage.offsetLeft + 'px';
@@ -255,11 +256,12 @@ canvas.addEventListener('click', function (event) {
         confirmMenu.style.left = '0';
         confirmMenu.style.width = '100%';
         confirmMenu.style.height = '100%';
-        confirmMenu.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        confirmMenu.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
         confirmMenu.style.display = 'flex';
         confirmMenu.style.justifyContent = 'center';
         confirmMenu.style.alignItems = 'center';
         confirmMenu.style.flexDirection = 'column'
+        confirmMenu.style.backdropFilter = 'blur(10px)'
       
         // Create a message container element
         const messageContainer = document.createElement('div');
@@ -418,24 +420,38 @@ canvas.addEventListener('click', function (event) {
         submitButton.addEventListener('click', function () {
           const [xCoord, yCoord, zCoord] = inputField.value.split(' ');
           const selectedItem = selectField.value;
-      
+          
+          if (!xCoord || !yCoord || !zCoord || isNaN(xCoord) || isNaN(yCoord) || isNaN(zCoord)) { // check if any input is empty or contains non-numeric characters
+            if (!errorAdded) { // check if error has already been added
+              const error = document.createElement('div');
+              error.textContent = 'Please enter valid coordinates';
+              error.style.color = 'red';
+              error.style.marginTop = '15px';
+              inputContainer.appendChild(error);
+              errorAdded = true; // set errorAdded to true
+            }
+            return; // stop the function from continuing
+          }
+          
           points.push({ x, y, xCoord, yCoord, zCoord, selectedItem });
-      
+          
           context.beginPath();
           context.arc(x, y, 6, 0, 2 * Math.PI);
           context.fillStyle = selectedItem;
           context.fill();
-      
+          
           inputContainer.remove();
           menuOpen = false;
+          errorAdded = false;
         });
-
+        
         inputField.addEventListener('keydown', function(event) {
           if (event.key === 'Enter') {
             event.preventDefault(); // prevent the default behavior of the Enter key
             submitButton.click(); // simulate a click event on the Submit button
           }
         });
+        
       
         const cancelButton = document.createElement('button');
         cancelButton.textContent = 'Cancel';
@@ -449,6 +465,7 @@ canvas.addEventListener('click', function (event) {
         cancelButton.addEventListener('click', function () {
           inputContainer.remove();
           menuOpen = false;
+          errorAdded = false;
         });
       
         inputContainer.appendChild(inputLabel);
