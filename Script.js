@@ -490,10 +490,16 @@ canvas.addEventListener('click', async function (event) {
 // function to handle copying point data to the clipboard
 async function copyToClipboard(point) {
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(`<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`)
-    console.log(`X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`);
+    navigator.clipboard.writeText(`<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`).then(
+      () => {
+        console.log(`X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`);
+      },
+      () => {
+        console.warn('Copy command failed.');
+      }
+    )
   } else {
-    console.warn('Copy command is not available.');
+    console.warn('Clipboard API not supported.');
   }
 }
 
