@@ -1,85 +1,106 @@
 <!DOCTYPE html>
 <html>
-<head >
+  <head>
     <title>Battlefield Coordinate Finder 9000</title>
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <meta property="og:title" content="Battlefield Coordinate Finder">
-    <meta property="og:description" content="A tool for creating, finding and saving coordinates on Battlefield maps.">
-    <meta property="og:image" content="https://media.discordapp.net/attachments/1077345398139670671/1077770187790635030/image.png">
-    <meta property="og:url" content="https://https://andy6170.github.io/BFCoordinateFinder/">
-</head>
-<body>
-    <h1>Battlefield Coordinate Finder 9000</h1>
-    <hr width=520px;>
-    <button id="new-button" class="newbutton">New</button>
-    <button id="load-button" class="loadbutton">Load</button>
-    <div id="hidesave" style="display: none;">
-    <button id="save-button" class="button">Save</button>
+    <link href="./style.css" rel="stylesheet" type="text/css" />
+    <meta property="og:title" content="Battlefield Coordinate Finder" />
+    <meta
+      property="og:description"
+      content="A tool for creating, finding and saving coordinates on Battlefield maps."
+    />
+    <meta
+      property="og:image"
+      content="https://media.discordapp.net/attachments/1077345398139670671/1077770187790635030/image.png"
+    />
+    <meta
+      property="og:url"
+      content="https://https://andy6170.github.io/BFCoordinateFinder/"
+    />
+    <script src="https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js"></script>
+  </head>
+  <body>
+    <span id="header-text">Battlefield Coordinate Finder 9000</span>
+    <div id="buttons-container">
+      <button id="new-button" class="newbutton">New</button>
+      <div class="load-button-container">
+        <button id="load-button" class="loadbutton">Load</button>
+      </div>
+      <div id="hidesave" style="display: none">
+        <button id="save-button" class="button">Save</button>
+      </div>
+      <button id="help-button" class="helpbutton">Help Toggle</button>
     </div>
-    <button id="help-button" class="helpbutton">Help Toggle</button>
-    <div id="new-options" style="display: none;">
-    <p>Select a map from the collection or import your own image</p>
-    <hr width=520px;>
-    <div>
-    <label for="game-mode">Game Mode: </label>
-    <select id="game-mode">
-      <option value="select">Please select..</option>
-      <option value="Conquest">Conquest</option>
-      <option value="TDM">Team Deathmatch</option>
-      <option value="FFA">Free For All</option>
-    </select>
-    </div>
-    <div>
-    <label for="map" class="map-selection">Map: </label>
-    <select id="map" class="map-selection">
-      <option value="">Please select a game mode</option>
-    </select>
-    </div>
-    <button id="new-submit" class="extrabutton">Submit</button>
-    <button id="new-upload" class="extrabutton2">Import</button>
-    </div>
-
-    <div id="load-options" style="display: none;">
-      <p>Load a save file from the collection or import your own file</p>
-      <hr width=520px;>
+    <div id="new-options" style="display: none">
+      <p>Select a map from the collection or import your own image</p>
       <div>
-      <label for="game-mode-save">Game Mode: </label>
-      <select id="game-mode-save">
-        <option value="select">Please select..</option>
-        <option value="Conquest">Conquest</option>
-        <option value="TDM">Team Deathmatch</option>
-        <option value="FFA">Free For All</option>
-      </select>
+        <label for="game-mode">Game Mode: </label>
+        <select id="game-mode">
+          <option value="select">Please select..</option>
+          <option value="Conquest">Conquest</option>
+          <option value="TDM">Team Deathmatch</option>
+          <option value="FFA">Free For All</option>
+        </select>
       </div>
       <div>
-      <label for="map-save" class="map-selection">Map: </label>
-      <select id="map-save" class="map-selection">
-        <option value="">Please select a game mode</option>
-      </select>
+        <label for="map" class="map-selection">Map: </label>
+        <select id="map" class="map-selection">
+          <option value="">Please select a game mode</option>
+        </select>
+      </div>
+      <button id="new-submit" class="extrabutton">Submit</button>
+      <button id="new-upload" class="extrabutton2">Import</button>
+    </div>
+
+    <div id="load-options" style="display: none">
+      <p>Load a save file from the collection or import your own file</p>
+      <hr width="520px;" />
+      <div>
+        <label for="game-mode-save">Game Mode: </label>
+        <select id="game-mode-save">
+          <option value="select">Please select..</option>
+          <option value="Conquest">Conquest</option>
+          <option value="TDM">Team Deathmatch</option>
+          <option value="FFA">Free For All</option>
+        </select>
+      </div>
+      <div>
+        <label for="map-save" class="map-selection">Map: </label>
+        <select id="map-save" class="map-selection">
+          <option value="">Please select a game mode</option>
+        </select>
       </div>
       <button id="load-submit" class="extrabutton">Submit</button>
       <button id="open-project" class="extrabutton2">Import</button>
-      </div>
+    </div>
 
-    <div id="help-content" style="display: none;">
-        <hr width=520px;>
+    <div id="help-content" style="display: none">
+      <hr width="520px;" />
       <p><strong>Controls:</strong></p>
       <p>Click on a space to create a position</p>
       <p>Coordinates are separated with spaces</p>
       <p>Click on a position to view the location and copy to clipboard</p>
-      <p style="line-height: 1.5;"><strong>Collection:</strong> Map image files <a href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Images/Conquest" target="_blank">here</a> Map save files <a href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Coordinate%20Files" target="_blank">here</a></p>
+      <p style="line-height: 1.5">
+        <strong>Collection:</strong> Map image files
+        <a
+          href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Images/Conquest"
+          target="_blank"
+          >here</a
+        >
+        Map save files
+        <a
+          href="https://github.com/andy6170/BFCoordinateFinder/tree/main/Map%20Coordinate%20Files"
+          target="_blank"
+          >here</a
+        >
+      </p>
     </div>
-    <hr width=520px; margin-top=10px;>
     <div id="canvas-wrapper">
-        <img src="image.jpg" id="background-image">
+      <img src="image.jpg" id="background-placeholer" />
+      <div id="main-canvas-container">
+        <img src="" id="background-image" />
         <canvas id="my-canvas"></canvas>
       </div>
-      
-    <!-- Add the canvas element with the correct id -->
-    <canvas id="my-canvas" overflow="scroll" height="60vh"></canvas>
-
-    <!-- Add the image input element with the correct id -->
-    <input type="file" id="image-input" style="display:none">
+    </div>
 
     <!-- Add the alert container with the correct class -->
     <div class="alert"></div>
@@ -87,13 +108,15 @@
     <!-- Include your script.js file -->
     <script src="./Script.js"></script>
 
-
     <!-- Add the blockly toolbox definition -->
     <xml id="toolbox" style="display: none">
-        <block type="math_number">
-            <field name="NUM">0</field>
-        </block>
-        <block type="create_vector"></block>
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+      <block type="create_vector"></block>
     </xml>
-</body>
+    <script>
+      panzoom(document.querySelector("#main-canvas-container"));
+    </script>
+  </body>
 </html>
