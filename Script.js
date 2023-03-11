@@ -272,7 +272,7 @@ canvas.addEventListener("mouseup", function (event) {
           const message = document.createElement("div");
           message.textContent = "Are you sure you want to delete?";
           message.style.fontFamily = "BatlefieldFont";
-          message.style.fontSize = "18px";
+          message.style.fontSize = "24px";
           message.style.color = "#fff";
 
           // Create a confirm button
@@ -280,10 +280,11 @@ canvas.addEventListener("mouseup", function (event) {
           confirmButton.textContent = "Yes";
           confirmButton.style.backgroundColor = "#ff3838";
           confirmButton.style.fontFamily = "BatlefieldFont";
-          confirmButton.style.fontSize = "18px";
+          confirmButton.style.fontSize = "24px";
           confirmButton.style.borderRadius = "4px";
           confirmButton.style.border = "3px";
           confirmButton.style.marginRight = "10px";
+          confirmButton.style.padding = "2px 13px";
           confirmButton.addEventListener("click", function () {
             // User confirmed deletion, perform the deletion process
             points.splice(i, 1);
@@ -298,9 +299,10 @@ canvas.addEventListener("mouseup", function (event) {
           cancelButton.textContent = "No";
           cancelButton.style.backgroundColor = "#4CAF50";
           cancelButton.style.fontFamily = "BatlefieldFont";
-          cancelButton.style.fontSize = "18px";
+          cancelButton.style.fontSize = "24px";
           cancelButton.style.borderRadius = "4px";
           cancelButton.style.border = "3px";
+          cancelButton.style.padding = "2px 13px";
           cancelButton.addEventListener("click", function () {
             // User canceled deletion, remove the confirm menu
             confirmMenu.remove();
@@ -312,6 +314,7 @@ canvas.addEventListener("mouseup", function (event) {
           buttonContainer.style.justifyContent = "center";
           buttonContainer.style.alignItems = "center";
           buttonContainer.style.flexDirection = "row"; // Add this line to display buttons horizontally
+          buttonContainer.style.gap = "1.5rem"
 
           // Add the message and buttons to their respective containers
           messageContainer.appendChild(message);
