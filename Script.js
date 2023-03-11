@@ -174,9 +174,7 @@ canvas.addEventListener("mouseup", function (event) {
     const scrollY = canvas.scrollTop;
     const truex = event.clientX + window.scrollX;
     const truey = event.clientY + window.scrollY;
-
     let clickedCircle = false;
-
     for (let i = 0; i < points.length; i++) {
       const point = points[i];
       const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
@@ -479,21 +477,19 @@ canvas.addEventListener("mouseup", function (event) {
 });
 
 // function to handle copying point data to the clipboard
-function copyToClipboard(point) {
-  if (document.queryCommandSupported("copy")) {
-    const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
-    const temp = document.createElement("textarea");
-    temp.textContent = code;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand("copy");
-    document.body.removeChild(temp);
-    console.log("Text copied to clipboard");
 
-    const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
-    //alert(coords);
+async function copyToClipboard(point) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(`<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`).then(
+      () => {
+        console.log(`X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`);
+      },
+      () => {
+        console.warn('Copy command failed.');
+      }
+    )
   } else {
-    console.warn("Copy command is not available.");
+    console.warn('Clipboard API not supported.');
   }
 }
 
