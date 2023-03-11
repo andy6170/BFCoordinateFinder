@@ -15,6 +15,7 @@ var hideSave = document.getElementById("hidesave");
 var loadSubmit = document.getElementById("load-submit");
 var openProject = document.getElementById("open-project");
 var saveButton = document.getElementById("save-button");
+var loadButtonContainer = document.querySelector(".load-button-container");
 const canvas = document.getElementById("my-canvas");
 const context = canvas.getContext("2d");
 const scrollX = canvas.scrollLeft;
@@ -51,6 +52,7 @@ newProjectBtn.addEventListener("click", function () {
       redrawCanvas();
       newOptions.style.display = "none";
       hideSave.style.display = "inline-block";
+      loadButtonContainer.style.paddingRight = "191px";
       newButton.style.backgroundColor = "cyan";
     };
   });
@@ -82,6 +84,7 @@ newSubmitBtn.addEventListener("click", function () {
     redrawCanvas();
     newOptions.style.display = "none";
     hideSave.style.display = "inline-block";
+    loadButtonContainer.style.paddingRight = "191px";
     newButton.style.backgroundColor = "cyan";
     newSubmit.innerHTML = "Submit";
     newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
@@ -105,6 +108,7 @@ loadSubmitBtn.addEventListener("click", function () {
         points = data.points;
         redrawCanvas();
         hideSave.style.display = "inline-block";
+        loadButtonContainer.style.paddingRight = "191px";
         loadOptions.style.display = "none";
         loadButton.style.backgroundColor = "cyan";
         loadSubmit.innerHTML = "Submit";
@@ -142,6 +146,7 @@ openProjectBtn.addEventListener("click", function () {
           points = data.points;
           redrawCanvas();
           hideSave.style.display = "inline-block";
+          loadButtonContainer.style.paddingRight = "191px";
           loadOptions.style.display = "none";
           loadButton.style.backgroundColor = "cyan";
         };
