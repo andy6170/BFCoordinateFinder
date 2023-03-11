@@ -507,6 +507,7 @@ function copyToClipboard(point) {
 }
 
 function redrawCanvas() {
+    document.getElementById('background-placeholer').style.display = 'none';
     // Draws the image
     context.drawImage(backgroundImage, 0, 0);
   
