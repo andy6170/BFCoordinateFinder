@@ -164,7 +164,7 @@ openProjectBtn.addEventListener('click', function () {
 
 
 
-canvas.addEventListener('click', function (event) {
+canvas.addEventListener('click', async function (event) {
   const x = event.offsetX;
   const y = event.offsetY;
   const scrollX = canvas.scrollLeft;
@@ -182,7 +182,7 @@ canvas.addEventListener('click', function (event) {
     if (distance <= 6  && !menuOpen) {
       menuOpen = true;
       // check if document.execCommand() is available before using it
-      copyToClipboard(point);
+      await copyToClipboard(point);
       clickedCircle = true;
       const menu = document.createElement('div');
       menu.style.position = 'absolute';
@@ -488,19 +488,10 @@ canvas.addEventListener('click', function (event) {
 
 
 // function to handle copying point data to the clipboard
-function copyToClipboard(point) {
-  if (document.queryCommandSupported('copy')) {
-    const code = `<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`;
-    const temp = document.createElement('textarea');
-    temp.textContent = code;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand('copy');
-    document.body.removeChild(temp);
-    console.log('Text copied to clipboard');
-
-    const coords = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`;
-    //alert(coords);
+async function copyToClipboard(point) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(`<block  type="CreateVector" x="0" y="0"><value name="VALUE-0"><block type="Number"><field name="NUM">${point.xCoord}</field></block></value><value name="VALUE-1"><block type="Number"><field name="NUM">${point.yCoord}</field></block></value><value name="VALUE-2"><block type="Number"><field name="NUM">${point.zCoord}</field></block></value></block>`)
+    console.log(`X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord} - Copied to Clipboard`);
   } else {
     console.warn('Copy command is not available.');
   }
