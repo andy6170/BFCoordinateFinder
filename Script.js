@@ -220,6 +220,11 @@ canvas.addEventListener("mouseup", function (event) {
         coordinatesField.style.borderRadius = "3px";
         coordinatesField.readOnly = true;
 
+        const noteLabel = document.createElement("label");
+        noteLabel.style.color = "#ffffff";
+        noteLabel.style.marginBottom = "14px";
+        noteLabel.textContent = `${point.note}`;
+
         const buttonContainer = document.createElement("div");
         buttonContainer.style.display = "flex";
         buttonContainer.style.width = "100%";
@@ -332,6 +337,7 @@ canvas.addEventListener("mouseup", function (event) {
 
         menu.appendChild(coordinatesLabel);
         menu.appendChild(coordinatesField);
+        menu.appendChild(noteLabel);
         menu.appendChild(buttonContainer);
 
         document.body.appendChild(menu);
@@ -367,11 +373,18 @@ canvas.addEventListener("mouseup", function (event) {
       const inputField = document.createElement("input");
       inputField.type = "text";
 
+      const descriptionLabel = document.createElement("label");
+      descriptionLabel.textContent = "Optional Note: ";
+      const descriptionField = document.createElement("input");
+      descriptionField.type = "text";
+      descriptionField.style.marginLeft = "37px";
+
       const selectLabel = document.createElement("label");
       selectLabel.textContent = "Coordinate Type: ";
       selectLabel.style.lineHeight = "2";
       const selectField = document.createElement("select");
       selectField.style.fontWeight = "bold";
+      selectField.style.marginLeft = "16px";
 
       const options = [
         { value: "#ff0000", label: "Spawn", backgroundColor: "#ff3526" },
@@ -406,12 +419,13 @@ canvas.addEventListener("mouseup", function (event) {
       submitButton.style.backgroundColor = "#00ffff";
       submitButton.style.fontFamily = "BatlefieldFont";
       submitButton.style.fontSize = "18px";
-      submitButton.style.marginTop = "5px";
+      submitButton.style.marginTop = "15px";
       submitButton.style.borderRadius = "4px";
       submitButton.style.border = "3px";
       submitButton.addEventListener("click", function () {
         const [xCoord, yCoord, zCoord] = inputField.value.split(" ");
         const selectedItem = selectField.value;
+        const note = descriptionField.value
 
         if (
           !xCoord ||
@@ -434,7 +448,7 @@ canvas.addEventListener("mouseup", function (event) {
           return; // stop the function from continuing
         }
 
-        points.push({ x, y, xCoord, yCoord, zCoord, selectedItem });
+        points.push({ x, y, xCoord, yCoord, zCoord, selectedItem, note });
 
         context.beginPath();
         context.arc(x, y, 6, 0, 2 * Math.PI);
@@ -458,7 +472,7 @@ canvas.addEventListener("mouseup", function (event) {
       cancelButton.style.backgroundColor = "#00ffff";
       cancelButton.style.fontFamily = "BatlefieldFont";
       cancelButton.style.fontSize = "18px";
-      cancelButton.style.marginTop = "5px";
+      cancelButton.style.marginTop = "15px";
       cancelButton.style.marginLeft = "10px";
       cancelButton.style.borderRadius = "4px";
       cancelButton.style.border = "3px";
@@ -473,6 +487,9 @@ canvas.addEventListener("mouseup", function (event) {
       inputContainer.appendChild(document.createElement("br"));
       inputContainer.appendChild(selectLabel);
       inputContainer.appendChild(selectField);
+      inputContainer.appendChild(document.createElement("br"));
+      inputContainer.appendChild(descriptionLabel);
+      inputContainer.appendChild(descriptionField);
       inputContainer.appendChild(document.createElement("br"));
       inputContainer.appendChild(submitButton);
       inputContainer.appendChild(cancelButton);
