@@ -5,6 +5,7 @@ const openProjectBtn = document.getElementById("open-project");
 const saveProjectBtn = document.getElementById("save-button");
 const loadProjectBtn = document.getElementById("load-button");
 var helpButton = document.getElementById("help-button");
+var listButton = document.getElementById("list-button");
 var loadButton = document.getElementById("load-button");
 var helpContent = document.getElementById("help-content");
 var newButton = document.getElementById("new-button");
@@ -12,6 +13,7 @@ var newOptions = document.getElementById("new-options");
 var loadOptions = document.getElementById("load-options");
 var newSubmit = document.getElementById("new-submit");
 var hideSave = document.getElementById("hidesave");
+var listContainer = document.getElementById("pointListContainer");
 var loadSubmit = document.getElementById("load-submit");
 var openProject = document.getElementById("open-project");
 var saveButton = document.getElementById("save-button");
@@ -32,6 +34,7 @@ const gameModeSelect = document.getElementById("game-mode");
 const saveSelect = document.getElementById("game-mode-save");
 const mapSelect = document.getElementById("map");
 const mapSaveSelect = document.getElementById("map-save");
+const pointList = document.getElementById("pointList");
 canvas.width = "0px";
 canvas.height = "0px";
 
@@ -52,8 +55,9 @@ newProjectBtn.addEventListener("click", function () {
       redrawCanvas();
       newOptions.style.display = "none";
       hideSave.style.display = "inline-block";
-      loadButtonContainer.style.paddingRight = "191px";
+      loadButtonContainer.style.paddingRight = "192px";
       newButton.style.backgroundColor = "cyan";
+      updatePointList()
     };
   });
   // trigger a click event on the imageInput to open the file picker dialog
@@ -84,10 +88,11 @@ newSubmitBtn.addEventListener("click", function () {
     redrawCanvas();
     newOptions.style.display = "none";
     hideSave.style.display = "inline-block";
-    loadButtonContainer.style.paddingRight = "191px";
+    loadButtonContainer.style.paddingRight = "192px";
     newButton.style.backgroundColor = "cyan";
     newSubmit.innerHTML = "Submit";
     newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
+    updatePointList()
   };
 });
 
@@ -108,11 +113,12 @@ loadSubmitBtn.addEventListener("click", function () {
         points = data.points;
         redrawCanvas();
         hideSave.style.display = "inline-block";
-        loadButtonContainer.style.paddingRight = "191px";
+        loadButtonContainer.style.paddingRight = "192px";
         loadOptions.style.display = "none";
         loadButton.style.backgroundColor = "cyan";
         loadSubmit.innerHTML = "Submit";
         loadSubmit.style.backgroundColor = "rgb(74, 74, 74)";
+        updatePointList()
       };
       image.src = data.image;
     })
@@ -146,9 +152,10 @@ openProjectBtn.addEventListener("click", function () {
           points = data.points;
           redrawCanvas();
           hideSave.style.display = "inline-block";
-          loadButtonContainer.style.paddingRight = "191px";
+          loadButtonContainer.style.paddingRight = "192px";
           loadOptions.style.display = "none";
           loadButton.style.backgroundColor = "cyan";
+          updatePointList()
         };
         image.src = data.image;
       }
@@ -458,6 +465,9 @@ canvas.addEventListener("mouseup", function (event) {
         inputContainer.remove();
         menuOpen = false;
         errorAdded = false;
+
+        updatePointList()
+
       });
 
       inputField.addEventListener("keydown", function (event) {
@@ -533,6 +543,14 @@ function redrawCanvas() {
   }
 }
 
+function defaultlistcolour(){
+  const allListItems = document.querySelectorAll('li');
+  
+  allListItems.forEach(li => {
+    li.style.backgroundColor = 'black';
+  });
+  }
+
 canvas.addEventListener("mousemove", function (event) {
   const x = event.offsetX;
   const y = event.offsetY;
@@ -544,10 +562,17 @@ canvas.addEventListener("mousemove", function (event) {
     context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
 
     if (context.isPointInPath(x, y)) {
+      defaultlistcolour()
       context.fillStyle = "#18ff03";
       circleHovered = true;
+      const li = document.getElementById(`li-${i}`);
+      console.log(li);
+      li.style.backgroundColor = "#27941f";
+      li.scrollIntoView({ behavior: "smooth", block: "center", scrollBehavior:"100ms"});
     } else {
       context.fillStyle = point.selectedItem;
+      const li = document.getElementById(`li-${i}`);
+      console.log(li);
     }
 
     context.fill();
@@ -615,37 +640,54 @@ saveProjectBtn.addEventListener("click", async function () {
 
 helpButton.addEventListener("click", function () {
   if (helpContent.style.display === "none") {
+    closebuttons()
     helpContent.style.display = "block";
     helpButton.style.backgroundColor = "rgb(161, 117, 0)";
   } else {
-    helpContent.style.display = "none";
-    helpButton.style.backgroundColor = "rgb(255, 174, 0)";
+    closebuttons()
+  }
+});
+
+listButton.addEventListener("click", function () {
+  if (listContainer.style.display === "none") {
+    closebuttons()
+    listContainer.style.display = "block";
+    listButton.style.backgroundColor = "rgb(0, 155, 155)";
+  } else {
+    closebuttons()
   }
 });
 
 newButton.addEventListener("click", function () {
   if (newOptions.style.display === "none") {
+    closebuttons()
     newOptions.style.display = "block";
-    loadOptions.style.display = "none";
     newButton.style.backgroundColor = "rgb(0, 155, 155)";
-    loadButton.style.backgroundColor = "cyan";
   } else {
-    newOptions.style.display = "none";
-    newButton.style.backgroundColor = "cyan";
+    closebuttons()
   }
 });
 
 loadButton.addEventListener("click", function () {
   if (loadOptions.style.display === "none") {
+    closebuttons()
     loadOptions.style.display = "block";
-    newOptions.style.display = "none";
     loadButton.style.backgroundColor = "rgb(0, 155, 155)";
-    newButton.style.backgroundColor = "cyan";
   } else {
-    loadOptions.style.display = "none";
-    loadButton.style.backgroundColor = "cyan";
+    closebuttons()
   }
 });
+
+function closebuttons() {
+  loadOptions.style.display = "none";
+  newOptions.style.display = "none";
+  helpContent.style.display = "none";
+  listContainer.style.display = "none";
+  loadButton.style.backgroundColor = "cyan";
+  newButton.style.backgroundColor = "cyan";
+  helpButton.style.backgroundColor = "rgb(255, 174, 0)";
+  listButton.style.backgroundColor = "cyan";
+}
 
 gameModeSelect.addEventListener("change", function () {
   const selectedGameMode = gameModeSelect.value;
@@ -765,3 +807,93 @@ mapSaveSelect.addEventListener("change", function () {
   const selectedSave = saveSelect.value;
   const selectedSaveOption = mapSaveSelect.value;
 });
+
+function updatePointList() {
+  pointList.innerHTML = "";
+
+  points.forEach((point, index) => {
+    const { xCoord, yCoord, zCoord, note } = point;
+
+    const li = document.createElement("li");
+    li.id = `li-${index}`;
+
+li.addEventListener("mouseenter", () => {
+  defaultlistcolour()
+  // Change the color of the corresponding circle
+  context.fillStyle = "#18ff03";
+  context.beginPath();
+  context.arc(point.x, point.y, 15, 0, 2 * Math.PI);
+  context.fill();
+  li.style.backgroundColor = "#27941f";
+});
+li.addEventListener("mouseleave", () => {
+  // Restore the color of the corresponding circle
+  redrawCanvas();
+  li.style.backgroundColor = "black";
+});
+
+    const xCoordLabel = document.createElement("label");
+    xCoordLabel.textContent = "X: ";
+    xCoordLabel.htmlFor = `xCoordInput-${index}`;
+
+    const xCoordInput = document.createElement("input");
+    xCoordInput.type = "number";
+    xCoordInput.value = xCoord;
+    xCoordInput.addEventListener("input", () => {
+      points[index].xCoord = parseFloat(xCoordInput.value); 
+    });
+
+    const yCoordLabel = document.createElement("label");
+    yCoordLabel.textContent = "Y: ";
+    yCoordLabel.htmlFor = `yCoordInput-${index}`;
+
+    const yCoordInput = document.createElement("input");
+    yCoordInput.type = "number";
+    yCoordInput.value = yCoord;
+    yCoordInput.addEventListener("input", () => {
+      points[index].yCoord = parseFloat(yCoordInput.value);
+    });
+
+    const zCoordLabel = document.createElement("label");
+    zCoordLabel.textContent = "Z: ";
+    zCoordLabel.htmlFor = `zCoordInput-${index}`;
+
+    const zCoordInput = document.createElement("input");
+    zCoordInput.type = "number";
+    zCoordInput.value = zCoord;
+    zCoordInput.addEventListener("input", () => {
+      points[index].zCoord = parseFloat(zCoordInput.value);
+    });
+
+    const noteLabel = document.createElement("label");
+    noteLabel.textContent = "Note: ";
+    noteLabel.htmlFor = `noteInput-${note}`;
+
+    const noteInput = document.createElement("input");
+    noteInput.type = "text";
+    noteInput.value = note;
+    noteInput.addEventListener("input", () => {
+      points[index].note = noteInput.value;
+    });
+
+    xCoordInput.classList.add("listbox");
+    yCoordInput.classList.add("listbox");
+    zCoordInput.classList.add("listbox");
+    noteInput.classList.add("listboxnote");
+    xCoordLabel.classList.add("listlabel");
+    yCoordLabel.classList.add("listlabel");
+    zCoordLabel.classList.add("listlabel");
+    noteLabel.classList.add("listlabel");
+
+    li.appendChild(xCoordLabel);
+    li.appendChild(xCoordInput);
+    li.appendChild(yCoordLabel);
+    li.appendChild(yCoordInput);
+    li.appendChild(zCoordLabel);
+    li.appendChild(zCoordInput);
+    li.appendChild(noteLabel);
+    li.appendChild(noteInput);
+
+    pointList.appendChild(li);
+  });
+}

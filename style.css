@@ -43,11 +43,11 @@ a {
   flex-direction: row;
   align-items: center;
   margin: 0;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .load-button-container {
-  padding-right: 270px;
+  padding-right: 335px;
 }
 
 #canvas-wrapper {
@@ -147,4 +147,45 @@ hr {
   border: 1px solid cyan;
   width: 548px;
   margin: 10px auto 10px 0;
+}
+
+#pointListContainer {
+  max-height: 28vh; /* or any other desired height */
+  overflow-y: auto;
+  left: -15px;
+  position: absolute;
+  background-color: black;
+  top: 110px;
+  width: 700px;
+  z-index: 9999;
+}
+
+li {
+  list-style: none;
+  list-style-type: none;
+  list-style-image: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.5;
+  background-color: black;
+}
+
+.listbox {
+  width: 90px;
+  color: white;
+  background-color: rgb(74, 74, 74);
+  position: relative;
+  top: -2px;
+}
+
+.listboxnote {
+  width: 150px;
+  color: white;
+  background-color: rgb(74, 74, 74);
+  position: relative;
+  top: -2px;
+}
+
+.listlabel {
+  padding-left: 20px;
 }
