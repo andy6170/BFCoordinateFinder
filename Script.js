@@ -37,6 +37,7 @@ const mapSaveSelect = document.getElementById("map-save");
 const pointList = document.getElementById("pointList");
 canvas.width = "0px";
 canvas.height = "0px";
+let drag = false;
 
 // New Button logic and configuration
 newProjectBtn.addEventListener("click", function () {
@@ -179,7 +180,14 @@ canvas.addEventListener("mouseup", function (event) {
 
   if (diffX < delta && diffY < delta) {
     // click event
+    drag = false
+  }else{
+    drag = true
+  }
+  });
 
+canvas.addEventListener("click", function () {
+  if(!drag){
     const x = event.offsetX;
     const y = event.offsetY;
     const scrollX = canvas.scrollLeft;
