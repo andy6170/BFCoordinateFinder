@@ -170,21 +170,26 @@ let startX;
 let startY;
 
 canvas.addEventListener("mousedown", function (event) {
-  startX = event.pageX;
-  startY = event.pageY;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!isMobile) {
+    startX = event.pageX;
+    startY = event.pageY;
+  }
 });
 
 canvas.addEventListener("mouseup", function (event) {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const diffX = Math.abs(event.pageX - startX);
   const diffY = Math.abs(event.pageY - startY);
-
-  if (diffX < delta && diffY < delta) {
-    // click event
-    drag = false
-  }else{
-    drag = true
+  if (!isMobile) {
+    if (diffX < delta && diffY < delta) {
+      // click event
+      drag = false
+    }else{
+      drag = true
+    }
   }
-  });
+});
 
 canvas.addEventListener("click", function () {
   if(!drag){
