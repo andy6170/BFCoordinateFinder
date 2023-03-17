@@ -760,22 +760,56 @@ gameModeSelect.addEventListener("change", function () {
   mapSelect.innerHTML = "";
 
   if (selectedGameMode === "select") {
-    const optionElement = document.createElement("option");
-    optionElement.value = "Please select a game mode";
-    optionElement.textContent = "Please select a game mode";
-    mapSelect.appendChild(optionElement);
-  } else {
-    fetch(`Map Images/${selectedGameMode}`)
-      .then(response => response.text())
-      .then(text => {
-        const mapOptions = text.split("\n").filter(Boolean);
-        for (const mapOption of mapOptions) {
-          const optionElement = document.createElement("option");
-          optionElement.value = mapOption;
-          optionElement.textContent = mapOption;
-          mapSelect.appendChild(optionElement);
-        }
-      });
+    const mapOptions = ["Please select a game mode"];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement("option");
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  } else if (selectedGameMode === "Conquest") { //List of Map Image Files - Update manually
+    const mapOptions = [
+      "Arica Harbor Medium",
+      "Arica Harbor Small",
+      "Breakaway Small",
+      "Caspian Border Medium",
+      "Caspian Border Small",
+      "Discarded Small",
+      "Exposure Medium",
+      "Manifest Medium",
+      "Orbital Medium",
+      "Renewal Medium",
+      "Renewal Small",
+      "Spearhead Medium",
+      "Stranded Medium",
+      "Stranded Small",
+    ];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement("option");
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  } else if (selectedGameMode === "TDM") { //List of Map Image Files - Update manually
+    const mapOptions = [
+      "Coming Soon..."
+    ];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement("option");
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
+  } else if (selectedGameMode === "FFA") { //List of Map Image Files - Update manually
+    const mapOptions = [
+      "Coming Soon..."
+    ];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement("option");
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
   }
 });
 
@@ -797,21 +831,9 @@ saveSelect.addEventListener("change", function () {
       optionElement.textContent = mapSaveOption;
       mapSaveSelect.appendChild(optionElement);
     }
-  } else if (selectedSave === "Conquest") {
+  } else if (selectedSave === "Conquest") { //List of Save Files - Update manually
     const mapSaveOptions = [
-      "Arica Harbor Medium",
-      "Arica Harbor Small",
       "Breakaway Small",
-      "Caspian Border Medium",
-      "Caspian Border Small",
-      "Discarded Small",
-      "Exposure Medium",
-      "Manifest Medium",
-      "Orbital Medium",
-      "Renewal Medium",
-      "Renewal Small",
-      "Spearhead Medium",
-      "Stranded Medium",
       "Stranded Small",
     ];
     for (const mapSaveOption of mapSaveOptions) {
@@ -820,16 +842,20 @@ saveSelect.addEventListener("change", function () {
       optionElement.textContent = mapSaveOption;
       mapSaveSelect.appendChild(optionElement);
     }
-  } else if (selectedSave === "TDM") {
-    const mapSaveOptions = ["Coming Soon..."];
+  } else if (selectedSave === "TDM") { //List of Save Files - Update manually
+    const mapSaveOptions = [
+      "Coming Soon..."
+    ];
     for (const mapSaveOption of mapSaveOptions) {
       const optionElement = document.createElement("option");
       optionElement.value = mapSaveOption;
       optionElement.textContent = mapSaveOption;
       mapSaveSelect.appendChild(optionElement);
     }
-  } else if (selectedSave === "FFA") {
-    const mapSaveOptions = ["Coming Soon..."];
+  } else if (selectedSave === "FFA") { //List of Save Files - Update manually
+    const mapSaveOptions = [
+      "Coming Soon..."
+    ];
     for (const mapSaveOption of mapSaveOptions) {
       const optionElement = document.createElement("option");
       optionElement.value = mapSaveOption;
