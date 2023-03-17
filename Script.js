@@ -760,52 +760,39 @@ gameModeSelect.addEventListener("change", function () {
   mapSelect.innerHTML = "";
 
   if (selectedGameMode === "select") {
-    const mapOptions = ["Please select a game mode"];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
-  } else if (selectedGameMode === "Conquest") {
-    const mapOptions = [
-      "Arica Harbor Medium",
-      "Arica Harbor Small",
-      "Breakaway Small",
-      "Caspian Border Medium",
-      "Caspian Border Small",
-      "Discarded Small",
-      "Exposure Medium",
-      "Manifest Medium",
-      "Orbital Medium",
-      "Renewal Medium",
-      "Renewal Small",
-      "Spearhead Medium",
-      "Stranded Medium",
-      "Stranded Small",
-    ];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
-  } else if (selectedGameMode === "TDM") {
-    const mapOptions = ["Coming Soon..."];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
-  } else if (selectedGameMode === "FFA") {
-    const mapOptions = ["Coming Soon..."];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
+    const optionElement = document.createElement("option");
+    optionElement.value = "";
+    optionElement.textContent = "Please select a game mode";
+    mapSelect.appendChild(optionElement);
+  } else {
+    fetch(`Map Images/${selectedGameMode}/`) // Fetch the directory listing
+      .then((response) => response.text())
+      .then((text) => {
+        const fileNames = text
+          .split("\n") // Split the directory listing into individual file names
+          .filter((name) => name.endsWith(".png")); // Filter out non-PNG files
+
+        if (fileNames.length === 0) {
+          const optionElement = document.createElement("option");
+          optionElement.value = "";
+          optionElement.textContent = "No maps found";
+          mapSelect.appendChild(optionElement);
+        } else {
+          for (const fileName of fileNames) {
+            const optionElement = document.createElement("option");
+            optionElement.value = fileName;
+            optionElement.textContent = fileName.replace(".png", "");
+            mapSelect.appendChild(optionElement);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        const optionElement = document.createElement("option");
+        optionElement.value = "";
+        optionElement.textContent = "Failed to load maps";
+        mapSelect.appendChild(optionElement);
+      });
   }
 });
 
