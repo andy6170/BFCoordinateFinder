@@ -761,37 +761,20 @@ gameModeSelect.addEventListener("change", function () {
 
   if (selectedGameMode === "select") {
     const optionElement = document.createElement("option");
-    optionElement.value = "";
+    optionElement.value = "Please select a game mode";
     optionElement.textContent = "Please select a game mode";
     mapSelect.appendChild(optionElement);
   } else {
-    fetch(`Map Images/${selectedGameMode}/`) // Fetch the directory listing
-      .then((response) => response.text())
-      .then((text) => {
-        const fileNames = text
-          .split("\n") // Split the directory listing into individual file names
-          .filter((name) => name.endsWith(".png")); // Filter out non-PNG files
-
-        if (fileNames.length === 0) {
+    fetch(`Map Images/${selectedGameMode}`)
+      .then(response => response.text())
+      .then(text => {
+        const mapOptions = text.split("\n").filter(Boolean);
+        for (const mapOption of mapOptions) {
           const optionElement = document.createElement("option");
-          optionElement.value = "";
-          optionElement.textContent = "No maps found";
+          optionElement.value = mapOption;
+          optionElement.textContent = mapOption;
           mapSelect.appendChild(optionElement);
-        } else {
-          for (const fileName of fileNames) {
-            const optionElement = document.createElement("option");
-            optionElement.value = fileName;
-            optionElement.textContent = fileName.replace(".png", "");
-            mapSelect.appendChild(optionElement);
-          }
         }
-      })
-      .catch((error) => {
-        console.error(error);
-        const optionElement = document.createElement("option");
-        optionElement.value = "";
-        optionElement.textContent = "Failed to load maps";
-        mapSelect.appendChild(optionElement);
       });
   }
 });
