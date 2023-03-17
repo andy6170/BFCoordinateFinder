@@ -191,8 +191,11 @@ canvas.addEventListener("mouseup", function (event) {
   }
 });
 
-canvas.addEventListener("click", function () {
+canvas.addEventListener("click", handleClick);
+canvas.addEventListener("touchend", handleClick);
 
+function handleClick(event) {
+  if(!drag){
     const x = event.offsetX;
     const y = event.offsetY;
     const scrollX = canvas.scrollLeft;
@@ -521,8 +524,8 @@ canvas.addEventListener("click", function () {
 
       inputField.focus();
     }
-  
-});
+  }
+};
 
 // function to handle copying point data to the clipboard
 
