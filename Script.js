@@ -38,6 +38,9 @@ const pointList = document.getElementById("pointList");
 canvas.width = "0px";
 canvas.height = "0px";
 let drag = false;
+const delta = 10;
+let startX;
+let startY;
 
 // New Button logic and configuration
 newProjectBtn.addEventListener("click", function () {
@@ -165,29 +168,43 @@ openProjectBtn.addEventListener("click", function () {
   input.click();
 });
 
-const delta = 10;
-let startX;
-let startY;
-
 canvas.addEventListener("mousedown", function (event) {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if (!isMobile) {
     startX = event.pageX;
     startY = event.pageY;
-  }
 });
 
 canvas.addEventListener("mouseup", function (event) {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const diffX = Math.abs(event.pageX - startX);
   const diffY = Math.abs(event.pageY - startY);
-  if (!isMobile) {
     if (diffX < delta && diffY < delta) {
       // click event
       drag = false
     }else{
       drag = true
     }
+});
+
+canvas.addEventListener("touchstart", function (event) {
+  startX = event.touches[0].clientX;
+  startY = event.touches[0].clientY;
+});
+
+canvas.addEventListener("touchmove", function (event) {
+event.preventDefault(); // Prevent scrolling
+const diffX = Math.abs(event.touches[0].clientX - startX);
+const diffY = Math.abs(event.touches[0].clientY - startY);
+  if (diffX > delta || diffY > delta) {
+    // drag event
+    drag = true;
+  }
+});
+
+canvas.addEventListener("touchend", function (event) {
+const diffX = Math.abs(event.changedTouches[0].clientX - startX);
+const diffY = Math.abs(event.changedTouches[0].clientY - startY);
+  if (diffX < delta && diffY < delta) {
+    // tap event
+    drag = false;
   }
 });
 
@@ -196,18 +213,47 @@ canvas.addEventListener("touchend", handleClick);
 
 function handleClick(event) {
   if(!drag){
-    const x = event.offsetX || event.changedTouches[0].pageX - canvas.offsetLeft;
-    const y = event.offsetY || event.changedTouches[0].pageY - canvas.offsetTop;
+    let x, y;
+    if (event.type === 'touchend') {
+      const touch = event.changedTouches[0];
+      var rect = canvas.getBoundingClientRect();
+      var scaleX = canvas.width / rect.width;
+      var scaleY = canvas.height / rect.height;
+      x = (touch.clientX - rect.left) * scaleX;
+      y = (touch.clientY - rect.top) * scaleY;
+    } else {
+      x = event.offsetX;
+      y = event.offsetY;
+    }
     const scrollX = canvas.scrollLeft;
     const scrollY = canvas.scrollTop;
-    const truex = event.clientX + window.scrollX;
-    const truey = event.clientY + window.scrollY;
+    const truex = event.clientX + window.scrollX || event.changedTouches[0].pageX + window.scrollX;
+    const truey = event.clientY + window.scrollY || event.changedTouches[0].pageY + window.scrollY;
     let clickedCircle = false;
+    console.log("Touch event coordinates: ", x, y);
+    console.log("Canvas offset values: ", canvas.offsetLeft, canvas.offsetTop);
     for (let i = 0; i < points.length; i++) {
       const point = points[i];
       const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
 
       if (distance <= 6 && !menuOpen) {
+        selectedPointIndex = i;
+        for (let j = 0; j < points.length; j++) {
+          const li = document.getElementById(`li-${j}`);
+          li.style.backgroundColor = j === selectedPointIndex ? "#27941f" : "#000000";
+        }
+        for (let i = 0; i < points.length; i++) {
+          context.beginPath();
+          context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+            defaultlistcolour()
+            context.fillStyle = "#18ff03";
+            context.fill();
+        }
+        const li = document.getElementById(`li-${selectedPointIndex}`);
+        console.log(li);
+        li.style.backgroundColor = "#27941f";
+        li.scrollIntoView({ behavior: "smooth", block: "center", scrollBehavior:"100ms"});
+
         menuOpen = true;
         // check if document.execCommand() is available before using it
         copyToClipboard(point);
@@ -265,6 +311,8 @@ function handleClick(event) {
         closeButton.addEventListener("click", function () {
           menu.remove();
           menuOpen = false;
+          defaultlistcolour()
+          redrawCanvas()
         });
 
         const deleteButton = document.createElement("button");
@@ -290,6 +338,7 @@ function handleClick(event) {
           confirmMenu.style.alignItems = "center";
           confirmMenu.style.flexDirection = "column";
           confirmMenu.style.backdropFilter = "blur(10px)";
+          confirmMenu.style.zIndex = 2
 
           // Create a message container element
           const messageContainer = document.createElement("div");
@@ -320,6 +369,7 @@ function handleClick(event) {
             confirmMenu.remove();
             menu.remove();
             menuOpen = false;
+            defaultlistcolour()
           });
 
           // Create a cancel button
@@ -364,7 +414,7 @@ function handleClick(event) {
         menu.appendChild(buttonContainer);
 
         document.body.appendChild(menu);
-
+        
         break;
       }
     }

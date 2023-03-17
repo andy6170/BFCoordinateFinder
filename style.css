@@ -107,7 +107,6 @@ a {
 .extrabutton2 {
   position: absolute;
   left: 476px; /* adjust this value to position the button horizontally */
-  z-index: 9999; /* make sure the button is on top of other elements */
 }
 
 .helpbutton {
@@ -157,7 +156,7 @@ hr {
   background-color: black;
   top: 110px;
   width: 700px;
-  z-index: 9999;
+  z-index: 1;
 }
 
 li {
@@ -188,4 +187,16 @@ li {
 
 .listlabel {
   padding-left: 20px;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
