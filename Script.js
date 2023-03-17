@@ -196,8 +196,8 @@ canvas.addEventListener("touchend", handleClick);
 
 function handleClick(event) {
   if(!drag){
-    const x = event.offsetX;
-    const y = event.offsetY;
+    const x = event.offsetX || event.changedTouches[0].pageX - canvas.offsetLeft;
+    const y = event.offsetY || event.changedTouches[0].pageY - canvas.offsetTop;
     const scrollX = canvas.scrollLeft;
     const scrollY = canvas.scrollTop;
     const truex = event.clientX + window.scrollX;
