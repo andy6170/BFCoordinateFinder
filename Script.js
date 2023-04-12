@@ -835,6 +835,7 @@ saveSelect.addEventListener("change", function () {
     const mapSaveOptions = [
       "Breakaway Small",
       "Stranded Small",
+      "Renewal Small",
     ];
     for (const mapSaveOption of mapSaveOptions) {
       const optionElement = document.createElement("option");
@@ -959,3 +960,9 @@ li.addEventListener("mouseleave", () => {
     pointList.appendChild(li);
   });
 }
+
+window.addEventListener('beforeunload', function(event) {
+  event.preventDefault();
+  event.returnValue = ''; // Required for Chrome
+  return 'Are you sure you want to leave?';
+});
