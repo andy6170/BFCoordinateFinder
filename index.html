@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <div id="headerContainer">
     <title>Battlefield Coordinate Finder 9000</title>
     <link href="./style.css" rel="stylesheet" type="text/css" />
     <meta property="og:title" content="Battlefield Coordinate Finder" />
@@ -20,7 +21,6 @@
   </head>
   <body>
     <span id="header-text">Battlefield Coordinate Finder 9000</span>
-    <hr/>
     <div id="buttons-container">
       <button id="new-button" class="newbutton">New</button>
       <div class="load-button-container">
@@ -32,8 +32,8 @@
       </div>
       <button id="help-button" class="helpbutton">Help</button>
     </div>
+  </div>
     <div id="new-options" style="display: none">
-      <hr/>
       <p>Select a map from the collection or import your own image</p>
       <div>
         <label for="game-mode">Game Mode: </label>
@@ -55,7 +55,6 @@
     </div>
 
     <div id="load-options" style="display: none">
-      <hr/>
       <p>Load a save file from the collection or import your own file</p>
       <div>
         <label for="game-mode-save">Game Mode: </label>
@@ -77,7 +76,6 @@
     </div>
 
     <div id="help-content" style="display: none">
-      <hr/>
       <p><strong>Controls:</strong></p>
       <p>Click on a space to create a position</p>
       <p>Coordinates are separated with spaces</p>
