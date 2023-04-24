@@ -270,6 +270,7 @@ function handleClick(event) {
         menu.style.flexDirection = "column";
         menu.style.alignItems = "center";
         menu.style.justifyContent = "center";
+        menu.style.zIndex = 2
 
         const coordinatesLabel = document.createElement("label");
         coordinatesLabel.style.color = "#00ffff";
@@ -338,7 +339,7 @@ function handleClick(event) {
           confirmMenu.style.alignItems = "center";
           confirmMenu.style.flexDirection = "column";
           confirmMenu.style.backdropFilter = "blur(10px)";
-          confirmMenu.style.zIndex = 2
+          confirmMenu.style.zIndex = 3
 
           // Create a message container element
           const messageContainer = document.createElement("div");
@@ -439,6 +440,7 @@ function handleClick(event) {
       inputContainer.style.backgroundColor = "#292929";
       inputContainer.style.border = "3px solid #141414";
       inputContainer.style.padding = "9px";
+      inputContainer.style.zIndex = 2
       console.log("scrollX:", scrollX, "scrollY:", scrollY);
 
       const inputLabel = document.createElement("label");
@@ -943,6 +945,7 @@ li.addEventListener("click", (event) => {
         menu.style.flexDirection = "column";
         menu.style.alignItems = "center";
         menu.style.justifyContent = "center";
+        menu.style.zIndex = 2
 
         const coordinatesLabel = document.createElement("label");
         coordinatesLabel.style.color = "#00ffff";
@@ -1011,7 +1014,7 @@ li.addEventListener("click", (event) => {
           confirmMenu.style.alignItems = "center";
           confirmMenu.style.flexDirection = "column";
           confirmMenu.style.backdropFilter = "blur(10px)";
-          confirmMenu.style.zIndex = 2
+          confirmMenu.style.zIndex = 3
 
           // Create a message container element
           const messageContainer = document.createElement("div");
