@@ -906,10 +906,11 @@ li.addEventListener("mouseleave", () => {
 });
 
 li.addEventListener("click", (event) => {
+  if (!menuOpen){
   const clickedElement = event.target;
   const isBackgroundClicked = clickedElement === event.currentTarget;
   const isLabelClicked = clickedElement.tagName.toLowerCase() === 'label';
-  if (!menuOpen && isBackgroundClicked || isLabelClicked) {
+  if (isBackgroundClicked || isLabelClicked) {
   selectedPointIndex = index;
         for (let j = 0; j < points.length; j++) {
           const li = document.getElementById(`li-${j}`);
@@ -1087,6 +1088,7 @@ li.addEventListener("click", (event) => {
 
         document.body.appendChild(menu);
       }
+  }
 });
 
     const xCoordLabel = document.createElement("label");
