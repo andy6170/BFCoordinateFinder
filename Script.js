@@ -61,7 +61,6 @@ newProjectBtn.addEventListener("click", function () {
       hideSave.style.display = "inline-block";
       loadButtonContainer.style.paddingRight = "192px";
       newButton.style.backgroundColor = "cyan";
-      updatePointList()
     };
   });
   // trigger a click event on the imageInput to open the file picker dialog
@@ -75,29 +74,41 @@ newSubmitBtn.addEventListener("click", function () {
   points = [];
   const selectedGameMode = gameModeSelect.value;
   const selectedMap = mapSelect.value;
-  const imagePath =
-    "Map Images/" + selectedGameMode + "/" + selectedMap + ".png";
-  const image = new Image();
-  image.src = imagePath;
+  const supportedExtensions = ["png", "jpg", "jpeg"]; // List of supported file extensions
 
-  image.onerror = function () {
+  // Find the appropriate extension from the supportedExtensions array
+  const selectedExtension = supportedExtensions.find((ext) =>
+    checkImageExists(`Map Images/${selectedGameMode}/${selectedMap}.${ext}`)
+  );
+
+  if (selectedExtension) {
+    const imagePath = `Map Images/${selectedGameMode}/${selectedMap}.${selectedExtension}`;
+    const image = new Image();
+    image.src = imagePath;
+
+    image.onerror = function () {
+      newSubmit.innerHTML = "Submit";
+      newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
+    };
+
+    image.onload = function () {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      backgroundImage.src = image.src;
+      redrawCanvas();
+      newOptions.style.display = "none";
+      hideSave.style.display = "inline-block";
+      loadButtonContainer.style.paddingRight = "192px";
+      newButton.style.backgroundColor = "cyan";
+      newSubmit.innerHTML = "Submit";
+      newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
+    };
+  } else {
+    // Handle the case when the image file is not found with any of the supported extensions.
+    console.log("Image not found for the selected options.");
     newSubmit.innerHTML = "Submit";
     newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
-  };
-
-  image.onload = function () {
-    canvas.width = image.width;
-    canvas.height = image.height;
-    backgroundImage.src = image.src;
-    redrawCanvas();
-    newOptions.style.display = "none";
-    hideSave.style.display = "inline-block";
-    loadButtonContainer.style.paddingRight = "192px";
-    newButton.style.backgroundColor = "cyan";
-    newSubmit.innerHTML = "Submit";
-    newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
-    updatePointList()
-  };
+  }
 });
 
 // Load file from collection and drop down list
@@ -122,7 +133,6 @@ loadSubmitBtn.addEventListener("click", function () {
         loadButton.style.backgroundColor = "cyan";
         loadSubmit.innerHTML = "Submit";
         loadSubmit.style.backgroundColor = "rgb(74, 74, 74)";
-        updatePointList()
       };
       image.src = data.image;
     })
@@ -159,7 +169,6 @@ openProjectBtn.addEventListener("click", function () {
           loadButtonContainer.style.paddingRight = "192px";
           loadOptions.style.display = "none";
           loadButton.style.backgroundColor = "cyan";
-          updatePointList()
         };
         image.src = data.image;
       }
@@ -600,6 +609,7 @@ function redrawCanvas() {
   document.getElementById("background-placeholer").style.display = "none";
   // Draws the image
   context.drawImage(backgroundImage, 0, 0);
+  updatePointList();
 
   // Draws the circles
   for (let i = 0; i < points.length; i++) {
@@ -799,7 +809,7 @@ gameModeSelect.addEventListener("change", function () {
     }
   } else if (selectedGameMode === "TDM") { //List of Map Image Files - Update manually
     const mapOptions = [
-      "Coming Soon..."
+      "Breakaway Large"
     ];
     for (const mapOption of mapOptions) {
       const optionElement = document.createElement("option");
@@ -823,9 +833,28 @@ gameModeSelect.addEventListener("change", function () {
 mapSelect.addEventListener("change", function () {
   const selectedGameMode = gameModeSelect.value;
   const selectedMapOption = mapSelect.value;
-  const imagePath = `Map Images/${selectedGameMode}/${selectedMapOption}.png`;
+  const supportedExtensions = ["png", "jpg", "jpeg"]; // List of supported file extensions
+
+  // Find the appropriate extension from the supportedExtensions array
+  const selectedExtension = supportedExtensions.find((ext) =>
+    checkImageExists(`Map Images/${selectedGameMode}/${selectedMapOption}.${ext}`)
+  );
+
+  // If a valid extension is found, set the imagePath accordingly
+  if (selectedExtension) {
+    const imagePath = `Map Images/${selectedGameMode}/${selectedMapOption}.${selectedExtension}`;
+  } else {
+    console.log("Image not found for the selected options.");
+  }
 });
 
+// Helper function to check if the image file exists
+function checkImageExists(imagePath) {
+  const http = new XMLHttpRequest();
+  http.open("HEAD", imagePath, false);
+  http.send();
+  return http.status !== 404;
+}
 saveSelect.addEventListener("change", function () {
   const selectedSave = saveSelect.value;
   mapSaveSelect.innerHTML = "";
@@ -1046,6 +1075,7 @@ li.addEventListener("click", (event) => {
             menu.remove();
             menuOpen = false;
             defaultlistcolour()
+            
           });
 
           // Create a cancel button
