@@ -1,0 +1,23 @@
+{
+  "name": "bfcoordinatefinder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andy6170/BFCoordinateFinder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andy6170/BFCoordinateFinder/issues"
+  },
+  "homepage": "https://github.com/andy6170/BFCoordinateFinder#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
