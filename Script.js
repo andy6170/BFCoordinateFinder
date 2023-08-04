@@ -1069,7 +1069,7 @@ li.addEventListener("click", (event) => {
           confirmButton.style.padding = "2px 13px";
           confirmButton.addEventListener("click", function () {
             // User confirmed deletion, perform the deletion process
-            points.splice(i, 1);
+            points.splice(selectedPointIndex, 1);
             redrawCanvas();
             confirmMenu.remove();
             menu.remove();
