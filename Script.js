@@ -11,6 +11,7 @@ var helpContent = document.getElementById("help-content");
 var newButton = document.getElementById("new-button");
 var newOptions = document.getElementById("new-options");
 var loadOptions = document.getElementById("load-options");
+var credits = document.getElementById("credits");
 var newSubmit = document.getElementById("new-submit");
 var hideSave = document.getElementById("hidesave");
 var listContainer = document.getElementById("pointListContainer");
@@ -606,6 +607,7 @@ async function copyToClipboard(point) {
 }
 
 function redrawCanvas() {
+  credits.style.display = "none";
   document.getElementById("background-placeholer").style.display = "none";
   // Draws the image
   context.drawImage(backgroundImage, 0, 0);
@@ -669,6 +671,7 @@ canvas.addEventListener("mousemove", function (event) {
 // Save Button Function
 saveProjectBtn.addEventListener("click", async function () {
   saveButton.style.backgroundColor = "rgb(0, 155, 155)";
+  await new Promise(resolve => setTimeout(resolve, 10));
   context.drawImage(backgroundImage, 0, 0);
   const data = {
     points: points,
@@ -723,6 +726,8 @@ helpButton.addEventListener("click", function () {
   if (helpContent.style.display === "none") {
     closebuttons()
     helpContent.style.display = "block";
+    helpContent.style.height = "0";
+    helpContent.style.height = helpContent.scrollHeight + "px";
     helpButton.style.backgroundColor = "rgb(161, 117, 0)";
   } else {
     closebuttons()
@@ -745,6 +750,8 @@ newButton.addEventListener("click", function () {
   if (newOptions.style.display === "none") {
     closebuttons()
     newOptions.style.display = "block";
+    newOptions.style.height = "0";
+    newOptions.style.height = newOptions.scrollHeight + "px";
     newButton.style.backgroundColor = "rgb(0, 155, 155)";
   } else {
     closebuttons()
@@ -755,6 +762,8 @@ loadButton.addEventListener("click", function () {
   if (loadOptions.style.display === "none") {
     closebuttons()
     loadOptions.style.display = "block";
+    loadOptions.style.height = "0";
+    loadOptions.style.height = loadOptions.scrollHeight + "px";
     loadButton.style.backgroundColor = "rgb(0, 155, 155)";
   } else {
     closebuttons()
@@ -762,9 +771,12 @@ loadButton.addEventListener("click", function () {
 });
 
 function closebuttons() {
+  loadOptions.style.height = "0";
   loadOptions.style.display = "none";
+  newOptions.style.height = "0";
   newOptions.style.display = "none";
   helpContent.style.display = "none";
+  helpContent.style.height = "0";
   listContainer.style.display = "none";
   loadButton.style.backgroundColor = "cyan";
   newButton.style.backgroundColor = "cyan";
