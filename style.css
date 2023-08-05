@@ -163,10 +163,21 @@ position: absolute;
 background-color: black;
 top: 110px;
 width: 560px;
-z-index: 1;
+z-index: 2;
 border: cyan;
 border-bottom: solid;
 border-right: solid;
+overflow: hidden;
+transition: height 0.4s ease; /* Adjust the duration as per your preference */
+}
+
+#credits {
+overflow-y: auto;
+position: absolute;
+background-color: black;
+top: 110px;
+width: 560px;
+z-index: 1;
 }
 
 #headerContainer {
