@@ -943,8 +943,10 @@ li.addEventListener("mouseenter", () => {
 li.addEventListener("mouseleave", () => {
   if (!menuOpen){
   // Restore the color of the corresponding circle
-  redrawCanvas();
   li.style.backgroundColor = "black";
+  setTimeout(() => {
+    redrawCanvas();
+  }, 10);
   }
 });
 
