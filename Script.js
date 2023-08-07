@@ -950,192 +950,211 @@ li.addEventListener("mouseleave", () => {
   }
 });
 
-li.addEventListener("click", (event) => {
-  if (!menuOpen){
-  const clickedElement = event.target;
-  const isBackgroundClicked = clickedElement === event.currentTarget;
-  const isLabelClicked = clickedElement.tagName.toLowerCase() === 'label';
-  if (isBackgroundClicked || isLabelClicked) {
-  selectedPointIndex = index;
-        for (let j = 0; j < points.length; j++) {
-          const li = document.getElementById(`li-${j}`);
-          li.style.backgroundColor = j === selectedPointIndex ? "#27941f" : "#000000";
-        }
-        for (let i = 0; i < points.length; i++) {
-          context.beginPath();
-          context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
-            defaultlistcolour()
-            context.fillStyle = "#18ff03";
-            context.fill();
-        }
-        const li = document.getElementById(`li-${selectedPointIndex}`);
-        console.log(li);
-        li.style.backgroundColor = "#27941f";
+li.addEventListener("mousedown", (event) => {
+  // Store the starting point of the mouse click
+  const startPoint = {
+    x: event.clientX,
+    y: event.clientY,
+  };
 
-        menuOpen = true;
-        // check if document.execCommand() is available before using it
-        copyToClipboard(point);
-        clickedCircle = true;
-        const menu = document.createElement("div");
-        menu.style.position = "absolute";
-        menu.style.top = "50%";
-        menu.style.left = "50%";
-        menu.style.transform = "translate(-50%, -50%)";
-        menu.style.backgroundColor = "#292929";
-        menu.style.border = "3px solid #141414";
-        menu.style.padding = "14px";
-        menu.style.display = "flex";
-        menu.style.flexDirection = "column";
-        menu.style.alignItems = "center";
-        menu.style.justifyContent = "center";
-        menu.style.zIndex = 2
+  li.addEventListener("mouseup", (event) => {
+    // Calculate the distance between the starting and ending points of the mouse click
+    const endPoint = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+    const distanceX = Math.abs(endPoint.x - startPoint.x);
+    const distanceY = Math.abs(endPoint.y - startPoint.y);
 
-        const coordinatesLabel = document.createElement("label");
-        coordinatesLabel.style.color = "#00ffff";
-        coordinatesLabel.style.marginBottom = "14px";
-        coordinatesLabel.textContent = "Copied to Clipboard:";
+    // If the mouse click started and ended on the background, open the menu
+    if (distanceX < 5 && distanceY < 5) {
+      if (!menuOpen){
+      const clickedElement = event.target;
+      const isBackgroundClicked = clickedElement === event.currentTarget;
+      const isLabelClicked = clickedElement.tagName.toLowerCase() === 'label';
+      if (isBackgroundClicked || isLabelClicked) {
+          selectedPointIndex = index;
+            for (let j = 0; j < points.length; j++) {
+              const li = document.getElementById(`li-${j}`);
+              li.style.backgroundColor = j === selectedPointIndex ? "#27941f" : "#000000";
+            }
+            for (let i = 0; i < points.length; i++) {
+              context.beginPath();
+              context.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+                defaultlistcolour()
+                context.fillStyle = "#18ff03";
+                context.fill();
+            }
+            const li = document.getElementById(`li-${selectedPointIndex}`);
+            console.log(li);
+            li.style.backgroundColor = "#27941f";
 
-        const coordinatesField = document.createElement("input");
-        coordinatesField.type = "text";
-        coordinatesField.value = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord}`;
-        coordinatesField.style.width = "100%";
-        coordinatesField.style.marginBottom = "9px";
-        coordinatesField.style.textAlign = "center";
-        coordinatesField.style.backgroundColor = "#141414";
-        coordinatesField.style.color = "#fff";
-        coordinatesField.style.border = "none";
-        coordinatesField.style.padding = "9px";
-        coordinatesField.style.borderRadius = "3px";
-        coordinatesField.readOnly = true;
+            menuOpen = true;
+            // check if document.execCommand() is available before using it
+            copyToClipboard(point);
+            clickedCircle = true;
+            const menu = document.createElement("div");
+            menu.style.position = "absolute";
+            menu.style.top = "50%";
+            menu.style.left = "50%";
+            menu.style.transform = "translate(-50%, -50%)";
+            menu.style.backgroundColor = "#292929";
+            menu.style.border = "3px solid #141414";
+            menu.style.padding = "14px";
+            menu.style.display = "flex";
+            menu.style.flexDirection = "column";
+            menu.style.alignItems = "center";
+            menu.style.justifyContent = "center";
+            menu.style.zIndex = 2
 
-        const noteLabel = document.createElement("label");
-        noteLabel.style.color = "#ffffff";
-        noteLabel.style.marginBottom = "14px";
-        noteLabel.textContent = `${point.note}`;
+            const coordinatesLabel = document.createElement("label");
+            coordinatesLabel.style.color = "#00ffff";
+            coordinatesLabel.style.marginBottom = "14px";
+            coordinatesLabel.textContent = "Copied to Clipboard:";
 
-        const buttonContainer = document.createElement("div");
-        buttonContainer.style.display = "flex";
-        buttonContainer.style.width = "100%";
-        buttonContainer.style.justifyContent = "space-between";
+            const coordinatesField = document.createElement("input");
+            coordinatesField.type = "text";
+            coordinatesField.value = `X: ${point.xCoord}, Y: ${point.yCoord}, Z: ${point.zCoord}`;
+            coordinatesField.style.width = "100%";
+            coordinatesField.style.marginBottom = "9px";
+            coordinatesField.style.textAlign = "center";
+            coordinatesField.style.backgroundColor = "#141414";
+            coordinatesField.style.color = "#fff";
+            coordinatesField.style.border = "none";
+            coordinatesField.style.padding = "9px";
+            coordinatesField.style.borderRadius = "3px";
+            coordinatesField.readOnly = true;
 
-        const closeButton = document.createElement("button");
-        closeButton.textContent = "Close";
-        closeButton.style.backgroundColor = "#00ffff";
-        closeButton.style.fontFamily = "BatlefieldFont";
-        closeButton.style.fontSize = "18px";
-        closeButton.style.marginTop = "5px";
-        closeButton.style.borderRadius = "4px";
-        closeButton.style.display = "inline-block";
-        closeButton.style.border = "3px";
-        closeButton.addEventListener("click", function () {
-          menu.remove();
-          menuOpen = false;
-          defaultlistcolour()
-          redrawCanvas()
-        });
+            const noteLabel = document.createElement("label");
+            noteLabel.style.color = "#ffffff";
+            noteLabel.style.marginBottom = "14px";
+            noteLabel.textContent = `${point.note}`;
 
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.style.backgroundColor = "#ff3838";
-        deleteButton.style.fontFamily = "BatlefieldFont";
-        deleteButton.style.fontSize = "18px";
-        deleteButton.style.marginTop = "5px";
-        deleteButton.style.borderRadius = "4px";
-        deleteButton.style.display = "inline-block";
-        deleteButton.style.border = "3px";
-        deleteButton.addEventListener("click", function () {
-          // Create a new menu element
-          const confirmMenu = document.createElement("div");
-          confirmMenu.style.position = "absolute";
-          confirmMenu.style.top = "0";
-          confirmMenu.style.left = "0";
-          confirmMenu.style.width = "100%";
-          confirmMenu.style.height = "100%";
-          confirmMenu.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
-          confirmMenu.style.display = "flex";
-          confirmMenu.style.justifyContent = "center";
-          confirmMenu.style.alignItems = "center";
-          confirmMenu.style.flexDirection = "column";
-          confirmMenu.style.backdropFilter = "blur(10px)";
-          confirmMenu.style.zIndex = 3
+            const buttonContainer = document.createElement("div");
+            buttonContainer.style.display = "flex";
+            buttonContainer.style.width = "100%";
+            buttonContainer.style.justifyContent = "space-between";
 
-          // Create a message container element
-          const messageContainer = document.createElement("div");
-          messageContainer.style.textAlign = "center";
-          messageContainer.style.marginBottom = "20px";
+            const closeButton = document.createElement("button");
+            closeButton.textContent = "Close";
+            closeButton.style.backgroundColor = "#00ffff";
+            closeButton.style.fontFamily = "BatlefieldFont";
+            closeButton.style.fontSize = "18px";
+            closeButton.style.marginTop = "5px";
+            closeButton.style.borderRadius = "4px";
+            closeButton.style.display = "inline-block";
+            closeButton.style.border = "3px";
+            closeButton.addEventListener("click", function () {
+              menu.remove();
+              menuOpen = false;
+              defaultlistcolour()
+              redrawCanvas()
+            });
 
-          // Create a message element
-          const message = document.createElement("div");
-          message.textContent = "Are you sure you want to delete?";
-          message.style.fontFamily = "BatlefieldFont";
-          message.style.fontSize = "24px";
-          message.style.color = "#fff";
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.style.backgroundColor = "#ff3838";
+            deleteButton.style.fontFamily = "BatlefieldFont";
+            deleteButton.style.fontSize = "18px";
+            deleteButton.style.marginTop = "5px";
+            deleteButton.style.borderRadius = "4px";
+            deleteButton.style.display = "inline-block";
+            deleteButton.style.border = "3px";
+            deleteButton.addEventListener("click", function () {
+              // Create a new menu element
+              const confirmMenu = document.createElement("div");
+              confirmMenu.style.position = "absolute";
+              confirmMenu.style.top = "0";
+              confirmMenu.style.left = "0";
+              confirmMenu.style.width = "100%";
+              confirmMenu.style.height = "100%";
+              confirmMenu.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+              confirmMenu.style.display = "flex";
+              confirmMenu.style.justifyContent = "center";
+              confirmMenu.style.alignItems = "center";
+              confirmMenu.style.flexDirection = "column";
+              confirmMenu.style.backdropFilter = "blur(10px)";
+              confirmMenu.style.zIndex = 3
 
-          // Create a confirm button
-          const confirmButton = document.createElement("button");
-          confirmButton.textContent = "Yes";
-          confirmButton.style.backgroundColor = "#ff3838";
-          confirmButton.style.fontFamily = "BatlefieldFont";
-          confirmButton.style.fontSize = "24px";
-          confirmButton.style.borderRadius = "4px";
-          confirmButton.style.border = "3px";
-          confirmButton.style.marginRight = "10px";
-          confirmButton.style.padding = "2px 13px";
-          confirmButton.addEventListener("click", function () {
-            // User confirmed deletion, perform the deletion process
-            points.splice(selectedPointIndex, 1);
-            redrawCanvas();
-            confirmMenu.remove();
-            menu.remove();
-            menuOpen = false;
-            defaultlistcolour()
+              // Create a message container element
+              const messageContainer = document.createElement("div");
+              messageContainer.style.textAlign = "center";
+              messageContainer.style.marginBottom = "20px";
+
+              // Create a message element
+              const message = document.createElement("div");
+              message.textContent = "Are you sure you want to delete?";
+              message.style.fontFamily = "BatlefieldFont";
+              message.style.fontSize = "24px";
+              message.style.color = "#fff";
+
+              // Create a confirm button
+              const confirmButton = document.createElement("button");
+              confirmButton.textContent = "Yes";
+              confirmButton.style.backgroundColor = "#ff3838";
+              confirmButton.style.fontFamily = "BatlefieldFont";
+              confirmButton.style.fontSize = "24px";
+              confirmButton.style.borderRadius = "4px";
+              confirmButton.style.border = "3px";
+              confirmButton.style.marginRight = "10px";
+              confirmButton.style.padding = "2px 13px";
+              confirmButton.addEventListener("click", function () {
+                // User confirmed deletion, perform the deletion process
+                points.splice(selectedPointIndex, 1);
+                redrawCanvas();
+                confirmMenu.remove();
+                menu.remove();
+                menuOpen = false;
+                defaultlistcolour()
             
-          });
+              });
 
-          // Create a cancel button
-          const cancelButton = document.createElement("button");
-          cancelButton.textContent = "No";
-          cancelButton.style.backgroundColor = "#4CAF50";
-          cancelButton.style.fontFamily = "BatlefieldFont";
-          cancelButton.style.fontSize = "24px";
-          cancelButton.style.borderRadius = "4px";
-          cancelButton.style.border = "3px";
-          cancelButton.style.padding = "2px 13px";
-          cancelButton.addEventListener("click", function () {
-            // User canceled deletion, remove the confirm menu
-            confirmMenu.remove();
-          });
+              // Create a cancel button
+              const cancelButton = document.createElement("button");
+              cancelButton.textContent = "No";
+              cancelButton.style.backgroundColor = "#4CAF50";
+              cancelButton.style.fontFamily = "BatlefieldFont";
+              cancelButton.style.fontSize = "24px";
+              cancelButton.style.borderRadius = "4px";
+              cancelButton.style.border = "3px";
+              cancelButton.style.padding = "2px 13px";
+              cancelButton.addEventListener("click", function () {
+                // User canceled deletion, remove the confirm menu
+                confirmMenu.remove();
+              });
 
-          // Create a button container
-          const buttonContainer = document.createElement("div");
-          buttonContainer.style.display = "flex";
-          buttonContainer.style.justifyContent = "center";
-          buttonContainer.style.alignItems = "center";
-          buttonContainer.style.flexDirection = "row"; // Add this line to display buttons horizontally
-          buttonContainer.style.gap = "1.5rem"
+              // Create a button container
+              const buttonContainer = document.createElement("div");
+              buttonContainer.style.display = "flex";
+              buttonContainer.style.justifyContent = "center";
+              buttonContainer.style.alignItems = "center";
+              buttonContainer.style.flexDirection = "row"; // Add this line to display buttons horizontally
+              buttonContainer.style.gap = "1.5rem"
 
-          // Add the message and buttons to their respective containers
-          messageContainer.appendChild(message);
-          buttonContainer.appendChild(confirmButton);
-          buttonContainer.appendChild(cancelButton);
-          confirmMenu.appendChild(messageContainer);
-          confirmMenu.appendChild(buttonContainer);
+              // Add the message and buttons to their respective containers
+              messageContainer.appendChild(message);
+              buttonContainer.appendChild(confirmButton);
+              buttonContainer.appendChild(cancelButton);
+              confirmMenu.appendChild(messageContainer);
+              confirmMenu.appendChild(buttonContainer);
 
-          // Add the confirm menu to the page
-          document.body.appendChild(confirmMenu);
-        });
+              // Add the confirm menu to the page
+              document.body.appendChild(confirmMenu);
+            });
 
-        buttonContainer.appendChild(deleteButton);
-        buttonContainer.appendChild(closeButton);
+            buttonContainer.appendChild(deleteButton);
+            buttonContainer.appendChild(closeButton);
 
-        menu.appendChild(coordinatesLabel);
-        menu.appendChild(coordinatesField);
-        menu.appendChild(noteLabel);
-        menu.appendChild(buttonContainer);
+            menu.appendChild(coordinatesLabel);
+            menu.appendChild(coordinatesField);
+            menu.appendChild(noteLabel);
+            menu.appendChild(buttonContainer);
 
-        document.body.appendChild(menu);
+            document.body.appendChild(menu);
+          }
+        }
       }
-  }
+    })
 });
 
     const xCoordLabel = document.createElement("label");
