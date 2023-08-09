@@ -673,9 +673,19 @@ saveProjectBtn.addEventListener("click", async function () {
   saveButton.style.backgroundColor = "rgb(0, 155, 155)";
   await new Promise(resolve => setTimeout(resolve, 10));
   context.drawImage(backgroundImage, 0, 0);
+  
+  // Create a new canvas for compressing the image as JPEG
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = canvas.width;
+  tempCanvas.height = canvas.height;
+  const tempContext = tempCanvas.getContext("2d");
+  tempContext.drawImage(backgroundImage, 0, 0);
+
+  const jpegDataUrl = tempCanvas.toDataURL("image/jpeg", 0.95);
+
   const data = {
     points: points,
-    image: canvas.toDataURL(),
+    image: jpegDataUrl,
   };
   const json = JSON.stringify(data);
   const blob = new Blob([json], { type: "application/json" });
