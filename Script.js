@@ -831,7 +831,12 @@ gameModeSelect.addEventListener("change", function () {
     }
   } else if (selectedGameMode === "TDM") { //List of Map Image Files - Update manually
     const mapOptions = [
-      "Breakaway Large"
+      "Breakaway Large",
+      "Exposure Large-Medium",
+      "Exposure Small",
+      "Renewal Large",
+      "Renewal Medium-Small",
+      "Stranded",
     ];
     for (const mapOption of mapOptions) {
       const optionElement = document.createElement("option");
@@ -841,7 +846,9 @@ gameModeSelect.addEventListener("change", function () {
     }
   } else if (selectedGameMode === "FFA") { //List of Map Image Files - Update manually
     const mapOptions = [
-      "Coming Soon..."
+      "Exposure",
+      "Renewal",
+      "Stranded",
     ];
     for (const mapOption of mapOptions) {
       const optionElement = document.createElement("option");
@@ -893,7 +900,9 @@ saveSelect.addEventListener("change", function () {
     const mapSaveOptions = [
       "Breakaway Small",
       "Stranded Small",
+      "Stranded Medium",
       "Renewal Small",
+      "Renewal Medium",
     ];
     for (const mapSaveOption of mapSaveOptions) {
       const optionElement = document.createElement("option");
