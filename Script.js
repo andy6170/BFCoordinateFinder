@@ -4,6 +4,7 @@ const loadSubmitBtn = document.getElementById("load-submit");
 const openProjectBtn = document.getElementById("open-project");
 const saveProjectBtn = document.getElementById("save-button");
 const loadProjectBtn = document.getElementById("load-button");
+const importBtn = document.getElementById("import-button");
 var helpButton = document.getElementById("help-button");
 var listButton = document.getElementById("list-button");
 var loadButton = document.getElementById("load-button");
@@ -18,7 +19,9 @@ var listContainer = document.getElementById("pointListContainer");
 var loadSubmit = document.getElementById("load-submit");
 var openProject = document.getElementById("open-project");
 var saveButton = document.getElementById("save-button");
+var importButton = document.getElementById("import-button");
 var loadButtonContainer = document.querySelector(".load-button-container");
+var canvasWrapper = document.getElementById("canvas-wrapper");
 const canvas = document.getElementById("my-canvas");
 const context = canvas.getContext("2d");
 const scrollX = canvas.scrollLeft;
@@ -45,7 +48,6 @@ let startY;
 
 // New Button logic and configuration
 newProjectBtn.addEventListener("click", function () {
-  points = [];
   const imageInput = document.createElement("input");
   imageInput.type = "file";
   imageInput.accept = "image/*";
@@ -54,13 +56,13 @@ newProjectBtn.addEventListener("click", function () {
     image.src = URL.createObjectURL(event.target.files[0]);
 
     image.onload = function () {
+      points = [];
       canvas.width = image.width;
       canvas.height = image.height;
       backgroundImage.src = image.src;
       redrawCanvas();
+      updateMenuButtons()
       newOptions.style.display = "none";
-      hideSave.style.display = "inline-block";
-      loadButtonContainer.style.paddingRight = "192px";
       newButton.style.backgroundColor = "cyan";
     };
   });
@@ -97,9 +99,8 @@ newSubmitBtn.addEventListener("click", function () {
       canvas.height = image.height;
       backgroundImage.src = image.src;
       redrawCanvas();
+      updateMenuButtons()
       newOptions.style.display = "none";
-      hideSave.style.display = "inline-block";
-      loadButtonContainer.style.paddingRight = "192px";
       newButton.style.backgroundColor = "cyan";
       newSubmit.innerHTML = "Submit";
       newSubmit.style.backgroundColor = "rgb(74, 74, 74)";
@@ -128,8 +129,7 @@ loadSubmitBtn.addEventListener("click", function () {
         backgroundImage.src = image.src;
         points = data.points;
         redrawCanvas();
-        hideSave.style.display = "inline-block";
-        loadButtonContainer.style.paddingRight = "192px";
+        updateMenuButtons()
         loadOptions.style.display = "none";
         loadButton.style.backgroundColor = "cyan";
         loadSubmit.innerHTML = "Submit";
@@ -146,7 +146,6 @@ loadSubmitBtn.addEventListener("click", function () {
 
 // Load Button logic and configuration
 openProjectBtn.addEventListener("click", function () {
-  points = [];
   const input = document.createElement("input");
   input.type = "file";
   input.accept = "application/json";
@@ -158,6 +157,7 @@ openProjectBtn.addEventListener("click", function () {
     reader.readAsText(file);
     reader.onload = function () {
       if (!isAborted) {
+        points = [];
         const data = JSON.parse(reader.result);
         const image = new Image();
         image.onload = function () {
@@ -166,9 +166,9 @@ openProjectBtn.addEventListener("click", function () {
           backgroundImage.src = image.src;
           points = data.points;
           redrawCanvas();
-          hideSave.style.display = "inline-block";
-          loadButtonContainer.style.paddingRight = "192px";
+          updateMenuButtons()
           loadOptions.style.display = "none";
+          hideSave.style.display = "inline-block";
           loadButton.style.backgroundColor = "cyan";
         };
         image.src = data.image;
@@ -177,6 +177,49 @@ openProjectBtn.addEventListener("click", function () {
   };
   input.click();
 });
+
+// Import coordinates from save file
+importBtn.addEventListener("click", function () {
+  importButton.style.backgroundColor = "rgb(0, 155, 155)";
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/json";
+  let isAborted = false;
+  input.onchange = function () {
+    const file = this.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function () {
+      if (!isAborted) {
+        const loadedData = JSON.parse(reader.result);
+        loadedData.points.forEach(loadedPoint => {
+          const isDuplicate = points.some(existingPoint => {
+            return (
+              existingPoint.x === loadedPoint.x &&
+              existingPoint.y === loadedPoint.y
+            );
+          });
+
+          if (!isDuplicate) {
+            points.push(loadedPoint);
+          }
+        });
+        redrawCanvas();
+        updateMenuButtons();
+      }
+      importButton.style.backgroundColor = "cyan";
+    };
+    reader.onerror = function () {
+      importButton.style.backgroundColor = "cyan";
+    };
+  };
+  input.oncancel = function () {
+    importButton.style.backgroundColor = "cyan";
+  };
+
+  input.click();
+});
+
 
 canvas.addEventListener("mousedown", function (event) {
     startX = event.pageX;
@@ -303,6 +346,7 @@ function handleClick(event) {
         const noteLabel = document.createElement("label");
         noteLabel.style.color = "#ffffff";
         noteLabel.style.marginBottom = "14px";
+        noteLabel.style.userSelect = "text";
         noteLabel.textContent = `${point.note}`;
 
         const buttonContainer = document.createElement("div");
@@ -630,6 +674,12 @@ function defaultlistcolour(){
     li.style.backgroundColor = 'black';
   });
   }
+
+function updateMenuButtons(){
+  hideSave.style.display = "inline-block";
+  loadButtonContainer.style.paddingRight = "0px";
+  canvasWrapper.style.display = "inline-block"
+}
 
 canvas.addEventListener("mousemove", function (event) {
   
@@ -986,7 +1036,7 @@ li.addEventListener("mousedown", (event) => {
     const distanceY = Math.abs(endPoint.y - startPoint.y);
 
     // If the mouse click started and ended on the background, open the menu
-    if (distanceX < 5 && distanceY < 5) {
+    if (distanceX < 3 && distanceY < 3) {
       if (!menuOpen){
       const clickedElement = event.target;
       const isBackgroundClicked = clickedElement === event.currentTarget;
@@ -1047,6 +1097,7 @@ li.addEventListener("mousedown", (event) => {
             const noteLabel = document.createElement("label");
             noteLabel.style.color = "#ffffff";
             noteLabel.style.marginBottom = "14px";
+            noteLabel.style.userSelect = "text";
             noteLabel.textContent = `${point.note}`;
 
             const buttonContainer = document.createElement("div");
