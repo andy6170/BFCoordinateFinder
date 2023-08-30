@@ -865,8 +865,10 @@ gameModeSelect.addEventListener("change", function () {
       "Caspian Border Small",
       "Discarded Small",
       "Exposure Medium",
+      "Flashpoint Medium",
       "Manifest Medium",
       "Orbital Medium",
+      "Reclaimed Small",
       "Renewal Medium",
       "Renewal Small",
       "Spearhead Medium",
@@ -962,7 +964,9 @@ saveSelect.addEventListener("change", function () {
     }
   } else if (selectedSave === "TDM") { //List of Save Files - Update manually
     const mapSaveOptions = [
-      "Coming Soon..."
+      "Exposure Large-Medium",
+      "Renewal Medium-Small",
+      "Stranded",
     ];
     for (const mapSaveOption of mapSaveOptions) {
       const optionElement = document.createElement("option");
@@ -972,7 +976,9 @@ saveSelect.addEventListener("change", function () {
     }
   } else if (selectedSave === "FFA") { //List of Save Files - Update manually
     const mapSaveOptions = [
-      "Coming Soon..."
+      "Exposure",
+      "Renewal",
+      "Stranded",
     ];
     for (const mapSaveOption of mapSaveOptions) {
       const optionElement = document.createElement("option");
