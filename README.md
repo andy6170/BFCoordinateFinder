@@ -3,6 +3,10 @@
 
 This tool is designed to let you use coordinates found by the community and store your own collection.
 
+Access the tool here: https://andy6170.github.io/BFCoordinateFinder/
+
+<a href="[https://www.w3schools.com/](https://andy6170.github.io/BFCoordinateFinder/)"></a>
+
 ![image](https://github.com/andy6170/BFCoordinateFinder/assets/56803536/601edca7-d1e4-4b32-9409-1d8db9923840)
 
 You can start a new project by using one of the maps we provide or by importing your own image.
