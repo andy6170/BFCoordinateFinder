@@ -45,6 +45,47 @@ let drag = false;
 const delta = 10;
 let startX;
 let startY;
+let gameModeData = {};
+let saveData = {};
+
+// Fetch the images and saves when the page loads
+window.addEventListener('load', (event) => {
+  fetch('https://api.github.com/repos/andy6170/BFCoordinateFinder/contents/Map%20Images')
+    .then(response => response.json())
+    .then(data => {
+      gameModeData = data.reduce((acc, file) => {
+        if (file.type === 'dir') {
+          const gameMode = file.name;
+          fetch(file.url)
+            .then(response => response.json())
+            .then(data => {
+              acc[gameMode] = data.filter(file => file.type === 'file').map(file => file.name.split('.')[0]);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        return acc;
+      }, {});
+    })
+    .catch(error => console.error('Error:', error));
+
+  fetch('https://api.github.com/repos/andy6170/BFCoordinateFinder/contents/Map%20Coordinate%20Files')
+    .then(response => response.json())
+    .then(data => {
+      saveData = data.reduce((acc, file) => {
+        if (file.type === 'dir') {
+          const save = file.name;
+          fetch(file.url)
+            .then(response => response.json())
+            .then(data => {
+              acc[save] = data.filter(file => file.type === 'file').map(file => file.name.split('.')[0]);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        return acc;
+      }, {});
+    })
+    .catch(error => console.error('Error:', error));
+});
 
 // New Button logic and configuration
 newProjectBtn.addEventListener("click", function () {
@@ -844,23 +885,17 @@ function closebuttons() {
   listButton.style.backgroundColor = "cyan";
 }
 
-gameModeSelect.addEventListener("change", function () {
+gameModeSelect.addEventListener('change', function () {
   const selectedGameMode = gameModeSelect.value;
-  mapSelect.innerHTML = "";
-
-  if (selectedGameMode !== "select") {
-    fetch(`https://api.github.com/repos/andy6170/BFCoordinateFinder/contents/Map%20Images/${selectedGameMode}`)
-      .then(response => response.json())
-      .then(data => {
-        const mapOptions = data.map(file => file.name.split('.')[0]);
-        for (const mapOption of mapOptions) {
-          const optionElement = document.createElement("option");
-          optionElement.value = mapOption;
-          optionElement.textContent = mapOption;
-          mapSelect.appendChild(optionElement);
-        }
-      })
-      .catch(error => console.error('Error:', error));
+  mapSelect.innerHTML = '';
+  if (selectedGameMode !== 'select') {
+    const mapOptions = gameModeData[selectedGameMode] || [];
+    for (const mapOption of mapOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapOption;
+      optionElement.textContent = mapOption;
+      mapSelect.appendChild(optionElement);
+    }
   }
 });
 
@@ -890,23 +925,17 @@ function checkImageExists(imagePath) {
   return http.status !== 404;
 }
 
-saveSelect.addEventListener("change", function () {
+saveSelect.addEventListener('change', function () {
   const selectedSave = saveSelect.value;
-  mapSaveSelect.innerHTML = "";
-
-  if (selectedSave !== "select") {
-    fetch(`https://api.github.com/repos/andy6170/BFCoordinateFinder/contents/Map%20Coordinate%20Files/${selectedSave}`)
-      .then(response => response.json())
-      .then(data => {
-        const mapSaveOptions = data.map(file => file.name.split('.')[0]); // Remove file extension
-        for (const mapSaveOption of mapSaveOptions) {
-          const optionElement = document.createElement("option");
-          optionElement.value = mapSaveOption;
-          optionElement.textContent = mapSaveOption;
-          mapSaveSelect.appendChild(optionElement);
-        }
-      })
-      .catch(error => console.error('Error:', error));
+  mapSaveSelect.innerHTML = '';
+  if (selectedSave !== 'select') {
+    const mapSaveOptions = saveData[selectedSave] || [];
+    for (const mapSaveOption of mapSaveOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = mapSaveOption;
+      optionElement.textContent = mapSaveOption;
+      mapSaveSelect.appendChild(optionElement);
+    }
   }
 });
 
