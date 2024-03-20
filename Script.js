@@ -848,66 +848,19 @@ gameModeSelect.addEventListener("change", function () {
   const selectedGameMode = gameModeSelect.value;
   mapSelect.innerHTML = "";
 
-  if (selectedGameMode === "select") {
-    const mapOptions = ["Please select a game mode"];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
-  } else if (selectedGameMode === "Conquest") { //List of Map Image Files - Update manually
-    const mapOptions = [
-      "Arica Harbor Medium",
-      "Arica Harbor Small",
-      "Breakaway Small",
-      "Caspian Border Medium",
-      "Caspian Border Small",
-      "Discarded Small",
-      "Exposure Medium",
-      "Flashpoint Medium",
-      "Manifest Medium",
-      "Orbital Medium",
-      "Reclaimed Small",
-      "Renewal Medium",
-      "Renewal Small",
-      "Spearhead Medium",
-      "Stranded Medium",
-      "Stranded Small",
-    ];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
-  } else if (selectedGameMode === "TDM") { //List of Map Image Files - Update manually
-    const mapOptions = [
-      "Breakaway Large",
-      "Exposure Large-Medium",
-      "Exposure Small",
-      "Renewal Large",
-      "Renewal Medium-Small",
-      "Stranded",
-    ];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
-  } else if (selectedGameMode === "FFA") { //List of Map Image Files - Update manually
-    const mapOptions = [
-      "Exposure",
-      "Renewal",
-      "Stranded",
-    ];
-    for (const mapOption of mapOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapOption;
-      optionElement.textContent = mapOption;
-      mapSelect.appendChild(optionElement);
-    }
+  if (selectedGameMode !== "select") {
+    fetch(`https://api.github.com/repos/andy6170/BFCoordinateFinder/contents/Map%20Images/${selectedGameMode}`)
+      .then(response => response.json())
+      .then(data => {
+        const mapOptions = data.map(file => file.name.split('.')[0]);
+        for (const mapOption of mapOptions) {
+          const optionElement = document.createElement("option");
+          optionElement.value = mapOption;
+          optionElement.textContent = mapOption;
+          mapSelect.appendChild(optionElement);
+        }
+      })
+      .catch(error => console.error('Error:', error));
   }
 });
 
@@ -936,56 +889,24 @@ function checkImageExists(imagePath) {
   http.send();
   return http.status !== 404;
 }
+
 saveSelect.addEventListener("change", function () {
   const selectedSave = saveSelect.value;
   mapSaveSelect.innerHTML = "";
 
-  if (selectedSave === "select") {
-    const mapSaveOptions = ["Please select a game mode"];
-    for (const mapSaveOption of mapSaveOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapSaveOption;
-      optionElement.textContent = mapSaveOption;
-      mapSaveSelect.appendChild(optionElement);
-    }
-  } else if (selectedSave === "Conquest") { //List of Save Files - Update manually
-    const mapSaveOptions = [
-      "Breakaway Small",
-      "Stranded Small",
-      "Stranded Medium",
-      "Renewal Small",
-      "Renewal Medium",
-    ];
-    for (const mapSaveOption of mapSaveOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapSaveOption;
-      optionElement.textContent = mapSaveOption;
-      mapSaveSelect.appendChild(optionElement);
-    }
-  } else if (selectedSave === "TDM") { //List of Save Files - Update manually
-    const mapSaveOptions = [
-      "Exposure Large-Medium",
-      "Renewal Medium-Small",
-      "Stranded",
-    ];
-    for (const mapSaveOption of mapSaveOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapSaveOption;
-      optionElement.textContent = mapSaveOption;
-      mapSaveSelect.appendChild(optionElement);
-    }
-  } else if (selectedSave === "FFA") { //List of Save Files - Update manually
-    const mapSaveOptions = [
-      "Exposure",
-      "Renewal",
-      "Stranded",
-    ];
-    for (const mapSaveOption of mapSaveOptions) {
-      const optionElement = document.createElement("option");
-      optionElement.value = mapSaveOption;
-      optionElement.textContent = mapSaveOption;
-      mapSaveSelect.appendChild(optionElement);
-    }
+  if (selectedSave !== "select") {
+    fetch(`https://api.github.com/repos/andy6170/BFCoordinateFinder/contents/Map%20Coordinate%20Files/${selectedSave}`)
+      .then(response => response.json())
+      .then(data => {
+        const mapSaveOptions = data.map(file => file.name.split('.')[0]); // Remove file extension
+        for (const mapSaveOption of mapSaveOptions) {
+          const optionElement = document.createElement("option");
+          optionElement.value = mapSaveOption;
+          optionElement.textContent = mapSaveOption;
+          mapSaveSelect.appendChild(optionElement);
+        }
+      })
+      .catch(error => console.error('Error:', error));
   }
 });
 
